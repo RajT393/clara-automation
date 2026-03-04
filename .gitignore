@@ -5,3 +5,4 @@ __pycache__/
 .DS_Store
 outputs/task_log/
 node_modules/
+"venv/" 
