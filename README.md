@@ -71,7 +71,7 @@ Outputs appear in `outputs/accounts/`. Open `dashboard/index.html` in your brows
 
 ```bash
 python scripts/pipeline_a.py \
-  --input /path/to/demo_transcript.txt \
+  --transcript /path/to/demo_transcript.txt \
   --account_id ACC_007
 ```
 
@@ -79,7 +79,7 @@ python scripts/pipeline_a.py \
 
 ```bash
 python scripts/pipeline_b.py \
-  --input /path/to/onboarding_transcript.txt \
+  --transcript /path/to/onboarding_transcript.txt \
   --account_id ACC_007
 ```
 

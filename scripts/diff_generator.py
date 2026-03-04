@@ -5,7 +5,7 @@ Produces both changes.json and changes.md
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 
@@ -96,7 +96,7 @@ def generate_changelog(v1_memo: dict, v2_memo: dict, account_id: str) -> dict:
     summary = {
         "account_id": account_id,
         "company_name": v2_memo.get("company_name"),
-        "changelog_generated_at": datetime.utcnow().isoformat() + "Z",
+        "changelog_generated_at": datetime.now(timezone.utc).isoformat(),
         "v1_source": "demo_call",
         "v2_source": "onboarding_call",
         "total_changes": len(changes),

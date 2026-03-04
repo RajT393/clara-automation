@@ -16,8 +16,9 @@ OUTPUTS_DIR = os.path.join(PROJECT_ROOT, "outputs", "accounts")
 try:
     from flask import Flask, jsonify, render_template_string
 except ImportError:
-    os.system("pip install flask -q")
-    from flask import Flask, jsonify, render_template_string
+    print("ERROR: Flask is required for the web dashboard.")
+    print("Install it with: pip install flask")
+    sys.exit(1)
 
 app = Flask(__name__)
 
