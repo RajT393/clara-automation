@@ -6,3 +6,6 @@ __pycache__/
 outputs/task_log/
 node_modules/
 "venv/" 
+data/onboarding/*.txt 
+data/demo/*.txt 
+data/onboarding/*.txt 
