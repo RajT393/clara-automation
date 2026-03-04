@@ -1,0 +1,95 @@
+{
+  "account_id": "ACC_TEST_COMPLEX",
+  "from_version": "v1",
+  "to_version": "v2",
+  "generated_at": "2026-03-03T18:03:31.967023+00:00",
+  "change_count": 12,
+  "changes": [
+    {
+      "field": "updated_at",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "2026-03-03T18:03:31.966339+00:00"
+    },
+    {
+      "field": "business_hours.start",
+      "change_type": "modified",
+      "old_value": "7:00",
+      "new_value": "7:00 AM"
+    },
+    {
+      "field": "business_hours.days",
+      "change_type": "modified",
+      "old_value": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "new_value": "Monday To Friday"
+    },
+    {
+      "field": "business_hours.timezone",
+      "change_type": "modified",
+      "old_value": "Central",
+      "new_value": "America/New_York"
+    },
+    {
+      "field": "business_hours.end",
+      "change_type": "modified",
+      "old_value": "17:00",
+      "new_value": "5:00 PM"
+    },
+    {
+      "field": "notes",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "Extracted via rule-based fallback. Manual review recommended."
+    },
+    {
+      "field": "questions_or_unknowns",
+      "change_type": "modified",
+      "old_value": [],
+      "new_value": [
+        "Emergency trigger conditions not clearly defined"
+      ]
+    },
+    {
+      "field": "emergency_routing_rules.primary_phone",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "312-555-0155"
+    },
+    {
+      "field": "emergency_routing_rules.secondary_phone",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "312-555-0166"
+    },
+    {
+      "field": "services_supported",
+      "change_type": "modified",
+      "old_value": [
+        "Commercial HVAC",
+        "Refrigeration systems",
+        "Industrial cooling"
+      ],
+      "new_value": [
+        "hvac"
+      ]
+    },
+    {
+      "field": "call_transfer_rules.timeout_seconds",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": 30
+    },
+    {
+      "field": "onboarding_source",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "test_ACC_TEST_COMPLEX.txt"
+    }
+  ]
+}

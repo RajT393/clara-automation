@@ -1,0 +1,17 @@
+[Onboarding Call - Premier HVAC Services]
+Specialist: Confirming Premier HVAC configuration.
+Client: Yes. Legal name is Premier HVAC Services Inc.
+Specialist: Hours - you mentioned it varied by season?
+Client: Peak season April through October: every day 6 AM to 8 PM Mountain Time. Off-peak November through March: Monday to Friday only, 7 AM to 6 PM Mountain Time.
+Specialist: Emergency definition?
+Client: Commercial building total HVAC failure, no heat below 40 degrees outside, no AC above 95 degrees outside, refrigeration system failure at a food service location, carbon monoxide detected.
+Specialist: Routing?
+Client: Sarah Mitchell, lead tech, 480-555-0211 primary. Robert Park, office manager, 480-555-0222 secondary. Try Sarah first, wait 45 seconds, then try Robert.
+Specialist: If both fail?
+Client: We will call you back within 2 hours. Log everything.
+Specialist: Commercial vs residential priority?
+Client: Commercial emergencies always first. Residential emergencies can wait up to 30 minutes longer.
+Specialist: ServiceTitan note?
+Client: Do not create jobs in ServiceTitan automatically. We will do that manually once we confirm the job type and billing code.
+Specialist: Address?
+Client: 2233 West Camelback Road, Phoenix Arizona 85015.

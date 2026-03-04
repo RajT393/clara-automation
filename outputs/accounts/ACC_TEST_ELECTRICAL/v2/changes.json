@@ -1,0 +1,75 @@
+{
+  "account_id": "ACC_TEST_ELECTRICAL",
+  "from_version": "v1",
+  "to_version": "v2",
+  "generated_at": "2026-03-03T17:57:11.175833+00:00",
+  "change_count": 9,
+  "changes": [
+    {
+      "field": "updated_at",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "2026-03-03T17:57:11.175833+00:00"
+    },
+    {
+      "field": "business_hours.start",
+      "change_type": "modified",
+      "old_value": "8AM",
+      "new_value": "8:30 AM"
+    },
+    {
+      "field": "business_hours.days",
+      "change_type": "modified",
+      "old_value": "Monday To Friday",
+      "new_value": "Monday Through Friday"
+    },
+    {
+      "field": "business_hours.end",
+      "change_type": "modified",
+      "old_value": "5PM",
+      "new_value": "5:30 PM"
+    },
+    {
+      "field": "questions_or_unknowns",
+      "change_type": "modified",
+      "old_value": [
+        "Company name not clearly stated",
+        "Emergency trigger conditions not clearly defined"
+      ],
+      "new_value": [
+        "Company name not clearly stated",
+        "Emergency contact phone number missing"
+      ]
+    },
+    {
+      "field": "integration_constraints",
+      "change_type": "modified",
+      "old_value": [
+        "never create jobs automatically."
+      ],
+      "new_value": [
+        "never create any job automatically."
+      ]
+    },
+    {
+      "field": "emergency_definition",
+      "change_type": "modified",
+      "old_value": [],
+      "new_value": [
+        "fire"
+      ]
+    },
+    {
+      "field": "call_transfer_rules.timeout_seconds",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": 45
+    },
+    {
+      "field": "onboarding_source",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "test_ACC_TEST_ELECTRICAL.txt"
+    }
+  ]
+}

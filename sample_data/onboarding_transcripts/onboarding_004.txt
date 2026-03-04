@@ -1,0 +1,33 @@
+Onboarding Call Transcript - Cornerstone HVAC Services
+
+[Recording starts]
+
+Onboarding Specialist: Let's get you configured. Business hours?
+
+Client: Monday through Friday, 8 AM to 5 PM Eastern.
+
+Onboarding Specialist: Office address?
+
+Client: 567 Peachtree Industrial Blvd, Atlanta, Georgia 30341.
+
+Onboarding Specialist: What are your emergency definitions?
+
+Client: Complete HVAC system failure, server room cooling failure, any situation the client describes as causing immediate business interruption, and refrigerant leak, because that's a safety hazard.
+
+Onboarding Specialist: Emergency routing after hours?
+
+Client: On-call tech line first: 404-555-0217. If no answer in 30 seconds, try Sandra our ops manager: 404-555-0189. If both fail, tell the caller we're dispatching someone and they'll be contacted within 20 minutes.
+
+Onboarding Specialist: Integration constraints?
+
+Client: We're on ServiceTrade. Do not create jobs automatically. Also, do not give out technician names or direct cell numbers to callers. Only route to the on-call line.
+
+Onboarding Specialist: Non-emergency after hours handling?
+
+Client: Collect info, confirm morning callback. Don't promise same-day response unless it's an emergency.
+
+Onboarding Specialist: Anything else?
+
+Client: When a caller says it's an emergency but it doesn't match our definitions, Clara should still treat it seriously, collect everything, and flag it for review. We'd rather over-respond than miss something.
+
+[Recording ends]

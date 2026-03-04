@@ -1,0 +1,104 @@
+# Changelog: ACC_BENS_ELECTRIC_SOLUTIONS
+## v1 → v2 Update
+**Generated:** 2026-03-03 11:55 UTC
+**Company:** Ben's Electric Solutions
+
+---
+
+## Summary
+- **Total changes:** 22
+- **Source:** Onboarding call/form
+- **Extraction method:** structured_parse
+
+---
+
+## Field Changes
+
+### `emergency_definition` — MODIFIED
+- **Before:** `[]`
+- **After:** `['Caller identifies as G&M Pressure Washing or Shelley Manley', 'Gas station emergency (Chevron or Esso property managed by G&M)']`
+
+### `integration_constraints` — MODIFIED
+- **Before:** `['Agent trained on website: benselectricsolutionsteam.com', 'Do not proactively mention pricing - only if customer specifically asks']`
+- **After:** `['Agent trained on website: benselectricsolutionsteam.com', 'Do not proactively mention pricing - only if customer specifically asks', 'Do not route contractors in field - they have direct numbers', 'Clara targets: new clients, small jobs, service calls, no prior relationship']`
+
+### `questions_or_unknowns` — MODIFIED
+- **Before:** `["Ben's direct transfer number not yet confirmed (second phone pending)", 'Exact emergency definition not discussed in demo', 'After-hours exception client details not yet captured (to be confirmed at onboarding)']`
+- **After:** `["Ben's second/personal number not yet active - required to enable live call transfer. Ben to provide via email reply."]`
+
+### `pricing_policy` — ADDED
+- **Added:** `{'service_call_fee': 115, 'hourly_rate_residential': 98, 'increment': 'half-hour', 'first_half_hour_after_callout': 49, 'mention_policy': 'Only mention pricing if customer specifically asks - do not proactively bring it up'}`
+
+### `notification_preferences` — ADDED
+- **Added:** `{'email': 'info@benselectricsolutionsteam.com', 'sms': 'Ben main business line', 'trigger': 'After every call'}`
+
+### `notes` — MODIFIED
+- **Before:** `Demo call focused on product value. Ben is sole call handler. Uses Android phone with conditional forwarding. Pricing: service call fee and hourly rate discussed but not for proactive mention. After-hours exception exists but details deferred to onboarding.`
+- **After:** `Onboarding call January 14 2026. Configuration complete pending Ben second number. G&M Pressure Washing is sole after-hours exception. Agent go-live target: weekend after Friday Jan 17 review call.`
+
+### `updated_at` — ADDED
+- **Added:** `2026-03-03T11:55:23.825124+00:00`
+
+### `emergency_routing_rules.exception_client` — ADDED
+- **Added:** `G&M Pressure Washing`
+
+### `emergency_routing_rules.exception_phone` — ADDED
+- **Added:** `403-870-8494`
+
+### `emergency_routing_rules.exception_email` — ADDED
+- **Added:** `gm_pressurewash@yahoo.ca`
+
+### `emergency_routing_rules.primary_phone` — ADDED
+- **Added:** `[BEN_SECOND_NUMBER_PENDING]`
+
+### `emergency_routing_rules.exception_note` — ADDED
+- **Added:** `Manages ~20 Chevron and Esso gas stations. If they call after hours for emergency, patch call through to Ben.`
+
+### `emergency_routing_rules.primary_contact` — MODIFIED
+- **Before:** `Ben (owner)`
+- **After:** `Ben (owner) - via call transfer`
+
+### `emergency_routing_rules.fallback` — MODIFIED
+- **Before:** `Take message, call back next business day`
+- **After:** `Leave detailed message, Ben will call back as soon as possible`
+
+### `emergency_routing_rules.exception_contact` — ADDED
+- **Added:** `Shelley Manley`
+
+### `after_hours_flow_summary` — MODIFIED
+- **Before:** `No emergency dispatch for general public. Take message and confirm callback next business day.`
+- **After:** `No emergency service for general public after hours. Exception: G&M Pressure Washing (Shelley Manley, 403-870-8494) - patch through to Ben for gas station emergencies. All others: take message, confirm callback next business day.`
+
+### `office_hours_flow_summary` — MODIFIED
+- **Before:** `Greet caller, understand purpose, collect name and callback number, attempt transfer to Ben or take detailed message.`
+- **After:** `Greet, understand purpose, collect name and callback number. Attempt transfer to Ben if he does not answer. If customer insists on speaking to a person, transfer to Ben second number (pending). Mention pricing only if asked: 15 service call fee, 8/hr residential.`
+
+### `business_hours.start` — MODIFIED
+- **Before:** `8:00 AM`
+- **After:** `8:30 AM`
+
+### `business_hours.end` — MODIFIED
+- **Before:** `4:30 PM`
+- **After:** `5:00 PM`
+
+### `call_transfer_rules.retries` — ADDED
+- **Added:** `1`
+
+### `call_transfer_rules.on_fail_message` — ADDED
+- **Added:** `I was unable to reach Ben directly. I've noted all your details and he will call you back as soon as possible.`
+
+### `call_transfer_rules.timeout_seconds` — ADDED
+- **Added:** `60`
+
+---
+
+## Agent Prompt
+- v1 prompt regenerated with confirmed onboarding data
+- All unconfirmed v1 assumptions replaced with verified values
+
+## Unresolved Questions
+
+- ⚠️ Ben's second/personal number not yet active - required to enable live call transfer. Ben to provide via email reply.
+
+---
+_Generated by Clara Automation Pipeline_

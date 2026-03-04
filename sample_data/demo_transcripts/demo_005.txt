@@ -1,0 +1,29 @@
+Demo Call Transcript - Prospect: TrueGuard Electrical
+
+[Recording starts]
+
+Sales Rep: Thanks for joining. Tell me about your business.
+
+Prospect: We're TrueGuard Electrical. We're out of Phoenix, Arizona. We do commercial electrical service, panel upgrades, lighting installations, and emergency electrical repairs. About 20 employees.
+
+Sales Rep: How do you handle phone calls right now?
+
+Prospect: We have a front desk person, works Monday through Friday, 7 AM to 3:30 PM Mountain Time. After hours and on weekends we have rotating on-call staff. It's three people on rotation.
+
+Sales Rep: What's an emergency in your world?
+
+Prospect: Power outage at a commercial facility. Electrical fire or spark situation. Panel failure. Any safety hazard involving electricity. Those need same-day or immediate response.
+
+Sales Rep: And how would you route emergency calls?
+
+Prospect: We have a main emergency line, 480-555-0234. That always goes to whoever is on call that week.
+
+Sales Rep: Any systems or integrations?
+
+Prospect: We use a basic CRM, nothing major. We're looking to move to something better, maybe ServiceTitan, but not there yet.
+
+Sales Rep: What's the main thing you want from Clara?
+
+Prospect: Professionalism. We lose bids because clients call and get a confused voicemail. We need every call answered professionally. And after hours emergencies need to get through fast.
+
+[Recording ends]

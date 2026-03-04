@@ -1,0 +1,168 @@
+{
+  "account_id": "ACC_BENS_ELECTRIC_SOLUTIONS",
+  "from_version": "v1",
+  "to_version": "v2",
+  "generated_at": "2026-03-03T11:55:23.826617+00:00",
+  "change_count": 22,
+  "changes": [
+    {
+      "field": "emergency_definition",
+      "change_type": "modified",
+      "old_value": [],
+      "new_value": [
+        "Caller identifies as G&M Pressure Washing or Shelley Manley",
+        "Gas station emergency (Chevron or Esso property managed by G&M)"
+      ]
+    },
+    {
+      "field": "integration_constraints",
+      "change_type": "modified",
+      "old_value": [
+        "Agent trained on website: benselectricsolutionsteam.com",
+        "Do not proactively mention pricing - only if customer specifically asks"
+      ],
+      "new_value": [
+        "Agent trained on website: benselectricsolutionsteam.com",
+        "Do not proactively mention pricing - only if customer specifically asks",
+        "Do not route contractors in field - they have direct numbers",
+        "Clara targets: new clients, small jobs, service calls, no prior relationship"
+      ]
+    },
+    {
+      "field": "questions_or_unknowns",
+      "change_type": "modified",
+      "old_value": [
+        "Ben's direct transfer number not yet confirmed (second phone pending)",
+        "Exact emergency definition not discussed in demo",
+        "After-hours exception client details not yet captured (to be confirmed at onboarding)"
+      ],
+      "new_value": [
+        "Ben's second/personal number not yet active - required to enable live call transfer. Ben to provide via email reply."
+      ]
+    },
+    {
+      "field": "pricing_policy",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": {
+        "service_call_fee": 115,
+        "hourly_rate_residential": 98,
+        "increment": "half-hour",
+        "first_half_hour_after_callout": 49,
+        "mention_policy": "Only mention pricing if customer specifically asks - do not proactively bring it up"
+      }
+    },
+    {
+      "field": "notification_preferences",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": {
+        "email": "info@benselectricsolutionsteam.com",
+        "sms": "Ben main business line",
+        "trigger": "After every call"
+      }
+    },
+    {
+      "field": "notes",
+      "change_type": "modified",
+      "old_value": "Demo call focused on product value. Ben is sole call handler. Uses Android phone with conditional forwarding. Pricing: service call fee and hourly rate discussed but not for proactive mention. After-hours exception exists but details deferred to onboarding.",
+      "new_value": "Onboarding call January 14 2026. Configuration complete pending Ben second number. G&M Pressure Washing is sole after-hours exception. Agent go-live target: weekend after Friday Jan 17 review call."
+    },
+    {
+      "field": "updated_at",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "2026-03-03T11:55:23.825124+00:00"
+    },
+    {
+      "field": "emergency_routing_rules.exception_client",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "G&M Pressure Washing"
+    },
+    {
+      "field": "emergency_routing_rules.exception_phone",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "403-870-8494"
+    },
+    {
+      "field": "emergency_routing_rules.exception_email",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "gm_pressurewash@yahoo.ca"
+    },
+    {
+      "field": "emergency_routing_rules.primary_phone",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "[BEN_SECOND_NUMBER_PENDING]"
+    },
+    {
+      "field": "emergency_routing_rules.exception_note",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "Manages ~20 Chevron and Esso gas stations. If they call after hours for emergency, patch call through to Ben."
+    },
+    {
+      "field": "emergency_routing_rules.primary_contact",
+      "change_type": "modified",
+      "old_value": "Ben (owner)",
+      "new_value": "Ben (owner) - via call transfer"
+    },
+    {
+      "field": "emergency_routing_rules.fallback",
+      "change_type": "modified",
+      "old_value": "Take message, call back next business day",
+      "new_value": "Leave detailed message, Ben will call back as soon as possible"
+    },
+    {
+      "field": "emergency_routing_rules.exception_contact",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "Shelley Manley"
+    },
+    {
+      "field": "after_hours_flow_summary",
+      "change_type": "modified",
+      "old_value": "No emergency dispatch for general public. Take message and confirm callback next business day.",
+      "new_value": "No emergency service for general public after hours. Exception: G&M Pressure Washing (Shelley Manley, 403-870-8494) - patch through to Ben for gas station emergencies. All others: take message, confirm callback next business day."
+    },
+    {
+      "field": "office_hours_flow_summary",
+      "change_type": "modified",
+      "old_value": "Greet caller, understand purpose, collect name and callback number, attempt transfer to Ben or take detailed message.",
+      "new_value": "Greet, understand purpose, collect name and callback number. Attempt transfer to Ben if he does not answer. If customer insists on speaking to a person, transfer to Ben second number (pending). Mention pricing only if asked: 15 service call fee, 8/hr residential."
+    },
+    {
+      "field": "business_hours.start",
+      "change_type": "modified",
+      "old_value": "8:00 AM",
+      "new_value": "8:30 AM"
+    },
+    {
+      "field": "business_hours.end",
+      "change_type": "modified",
+      "old_value": "4:30 PM",
+      "new_value": "5:00 PM"
+    },
+    {
+      "field": "call_transfer_rules.retries",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": 1
+    },
+    {
+      "field": "call_transfer_rules.on_fail_message",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "I was unable to reach Ben directly. I've noted all your details and he will call you back as soon as possible."
+    },
+    {
+      "field": "call_transfer_rules.timeout_seconds",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": 60
+    }
+  ]
+}

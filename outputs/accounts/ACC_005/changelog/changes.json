@@ -1,0 +1,111 @@
+{
+  "account_id": "ACC_005",
+  "company_name": "TrueGuard Electrical",
+  "changelog_generated_at": "2026-03-03T11:25:29.461616Z",
+  "v1_source": "demo_call",
+  "v2_source": "onboarding_call",
+  "total_changes": 7,
+  "critical_changes": 4,
+  "minor_changes": 3,
+  "changes": {
+    "critical": [
+      {
+        "field": "emergency_definition",
+        "change_type": "list_updated",
+        "v1_value": [
+          "Panel failure",
+          "Power outage at facility",
+          "Electrical fire or spark"
+        ],
+        "v2_value": [
+          "Panel failure",
+          "Power outage at facility",
+          "Electrical fire or spark",
+          "Live wire exposure",
+          "Generator failure",
+          "Burning smell from electrical panel"
+        ],
+        "added_items": [
+          "Live wire exposure",
+          "Generator failure",
+          "Burning smell from electrical panel"
+        ],
+        "removed_items": [],
+        "note": "List updated in onboarding"
+      },
+      {
+        "field": "integration_constraints",
+        "change_type": "list_updated",
+        "v1_value": [
+          "Servicetitan integration in use \u2014 see constraints above"
+        ],
+        "v2_value": [
+          "Do not provide pricing quotes to callers",
+          "Do not provide arrival time estimates unless specifically authorized",
+          "Servicetrade integration in use \u2014 see constraints above",
+          "Servicetitan integration in use \u2014 see constraints above"
+        ],
+        "added_items": [
+          "Do not provide pricing quotes to callers",
+          "Do not provide arrival time estimates unless specifically authorized",
+          "Servicetrade integration in use \u2014 see constraints above"
+        ],
+        "removed_items": [],
+        "note": "List updated in onboarding"
+      },
+      {
+        "field": "non_emergency_routing_rules",
+        "change_type": "updated",
+        "v1_value": null,
+        "v2_value": "Collect name, phone number, and description. Confirm follow-up during next business hours. Do not attempt transfer.",
+        "significance": "critical",
+        "note": "Confirmed in onboarding call \u2014 overrides demo assumption"
+      },
+      {
+        "field": "services_supported",
+        "change_type": "list_updated",
+        "v1_value": [
+          "Electrical Services",
+          "Panel Services"
+        ],
+        "v2_value": [
+          "Maintenance Contracts",
+          "Electrical Services",
+          "Panel Services"
+        ],
+        "added_items": [
+          "Maintenance Contracts"
+        ],
+        "removed_items": [],
+        "note": "List updated in onboarding"
+      }
+    ],
+    "minor": [
+      {
+        "field": "notes",
+        "change_type": "updated",
+        "v1_value": "Phoenix AZ: no daylight saving \u2014 stays on Mountain Standard Time year-round",
+        "v2_value": "End emergency calls with: 'Help is on the way'; Phoenix AZ: no daylight saving \u2014 stays on Mountain Standard Time year-round",
+        "significance": "minor",
+        "note": "Updated with precise onboarding data"
+      },
+      {
+        "field": "version",
+        "change_type": "added",
+        "v1_value": null,
+        "v2_value": "v2",
+        "note": "New field added in onboarding"
+      },
+      {
+        "field": "version_history",
+        "change_type": "added",
+        "v1_value": null,
+        "v2_value": {
+          "v1_generated_at": "2026-03-03T11:25:29.397720Z",
+          "v2_generated_at": "2026-03-03T11:25:29.461533Z"
+        },
+        "note": "New field added in onboarding"
+      }
+    ]
+  }
+}

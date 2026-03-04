@@ -1,0 +1,13 @@
+[Demo Call - Guardian Alarm Systems]
+Sales Rep: Welcome to the Clara demo. Who am I speaking with?
+Client: This is Mike from Guardian Alarm Systems. Dallas Texas. We do commercial fire alarm installations and monitoring.
+Sales Rep: What is your biggest pain point?
+Client: After 6 PM there is nobody at our office. Calls just ring out.
+Sales Rep: What are your office hours?
+Client: Monday through Saturday, 7 AM to 6 PM Central time.
+Sales Rep: What counts as an emergency?
+Client: Any active alarm trigger. System offline. Smoke or fire detected.
+Sales Rep: Emergency routing?
+Client: Our dispatch center at 972-555-0134. If that fails, technician on call at 972-555-0198.
+Sales Rep: Any software systems?
+Client: We use a custom CRM. Do not ever promise a specific technician will show up. Just say someone from our team will be there.

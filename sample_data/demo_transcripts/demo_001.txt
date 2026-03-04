@@ -1,0 +1,35 @@
+Demo Call Transcript - Prospect: Shield Fire Protection
+
+[Recording starts]
+
+Sales Rep (Clara Team): Hi, thank you for joining today. I'm excited to show you what Clara can do for your team. Can you start by telling me a bit about your business?
+
+Prospect: Sure, yeah. We're Shield Fire Protection. We do fire suppression systems, sprinkler installation and inspection, and fire alarm monitoring. We're based out of Columbus, Ohio. We have about 12 technicians in the field.
+
+Sales Rep: Great. How do you currently handle inbound calls?
+
+Prospect: Honestly it's a mess. We have a receptionist, Lisa, and she works Monday through Friday, 8 AM to 5 PM Eastern. But we get calls at all hours. Nights, weekends. Right now those just go to voicemail or to whoever is on call, but it's not consistent.
+
+Sales Rep: What happens when an emergency call comes in after hours?
+
+Prospect: That's the big problem. Like if someone calls saying their sprinkler went off or there's an active fire alarm, we need that escalated immediately. We have a tech on call, Mike, his number is 614-555-0192. If he doesn't answer, it goes to our dispatch line, 614-555-0100.
+
+Sales Rep: Got it. And what would you consider a non-emergency for after hours?
+
+Prospect: Pretty much everything else. Scheduling an inspection, questions about a quote, that kind of thing. Those can wait until morning.
+
+Sales Rep: Do you use any field service software?
+
+Prospect: We use ServiceTrade for job management. But I should mention, we've had issues with duplicate jobs being created. So whatever you build, it shouldn't automatically create sprinkler jobs in ServiceTrade without human review first.
+
+Sales Rep: Understood. And what's the main thing you want Clara to do?
+
+Prospect: Answer every call professionally. During business hours, screen calls, collect info, route to the right person. After hours, identify if it's an emergency and get help dispatched fast. And log everything so we don't drop the ball on follow-ups.
+
+Sales Rep: Let me show you an example of how Clara handles an after-hours emergency call...
+
+[Demo plays]
+
+Prospect: Wow, okay. That's exactly what I need. How soon can we get this set up?
+
+[Recording ends]

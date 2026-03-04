@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clara Automation Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0b0f;
+    --surface: #12141a;
+    --surface2: #1a1d26;
+    --border: #252836;
+    --accent: #00e5a0;
+    --accent2: #ff6b4a;
+    --accent3: #7b6eff;
+    --text: #e8eaf2;
+    --muted: #6b7094;
+    --critical: #ff4a6b;
+    --success: #00e5a0;
+    --warn: #ffbb33;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(10,11,15,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: #0a0b0f;
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.3px;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .status-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 28px 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.4s ease both;
+  }
+
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.1s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .stat-card.green::after { background: var(--accent); }
+  .stat-card.orange::after { background: var(--accent2); }
+  .stat-card.purple::after { background: var(--accent3); }
+  .stat-card.red::after { background: var(--critical); }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-value.green { color: var(--accent); }
+  .stat-value.orange { color: var(--accent2); }
+  .stat-value.purple { color: var(--accent3); }
+  .stat-value.red { color: var(--critical); }
+
+  .stat-desc { font-size: 12px; color: var(--muted); }
+
+  /* Section title */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-top: 8px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 16px;
+  }
+
+  /* Account cards grid */
+  .accounts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .account-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    animation: slideUp 0.5s ease both;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .account-card:hover {
+    border-color: rgba(0,229,160,0.3);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .account-id {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .company-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .version-badges {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .badge-v1 {
+    background: rgba(123,110,255,0.15);
+    color: var(--accent3);
+    border: 1px solid rgba(123,110,255,0.25);
+  }
+
+  .badge-v2 {
+    background: rgba(0,229,160,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(0,229,160,0.2);
+  }
+
+  .card-body { padding: 16px 20px; }
+
+  .info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+
+  .info-key {
+    color: var(--muted);
+    width: 100px;
+    flex-shrink: 0;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    padding-top: 1px;
+  }
+
+  .info-val { color: var(--text); line-height: 1.5; }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  .tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* Diff section */
+  .diff-section {
+    border-top: 1px solid var(--border);
+    padding: 14px 20px 16px;
+  }
+
+  .diff-title {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .change-count {
+    background: rgba(255,75,107,0.15);
+    color: var(--critical);
+    border: 1px solid rgba(255,75,107,0.2);
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 10px;
+  }
+
+  .change-count.minor {
+    background: rgba(255,187,51,0.1);
+    color: var(--warn);
+    border-color: rgba(255,187,51,0.2);
+  }
+
+  .diff-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 11px;
+  }
+
+  .diff-field {
+    color: var(--muted);
+    grid-column: 1 / -1;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+    color: var(--accent3);
+  }
+
+  .diff-old {
+    background: rgba(255,75,107,0.08);
+    border: 1px solid rgba(255,75,107,0.15);
+    border-radius: 6px;
+    padding: 6px 8px;
+    color: #ff8a9e;
+    font-size: 10px;
+    line-height: 1.4;
+    position: relative;
+  }
+
+  .diff-old::before {
+    content: '− v1';
+    display: block;
+    font-size: 9px;
+    color: rgba(255,75,107,0.6);
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  .diff-new {
+    background: rgba(0,229,160,0.06);
+    border: 1px solid rgba(0,229,160,0.15);
+    border-radius: 6px;
+    padding: 6px 8px;
+    color: #5effd4;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .diff-new::before {
+    content: '+ v2';
+    display: block;
+    font-size: 9px;
+    color: rgba(0,229,160,0.5);
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Prompt preview */
+  .prompt-preview {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-height: 120px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 10px;
+  }
+
+  .prompt-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(transparent, var(--surface2));
+  }
+
+  /* Unknown flags */
+  .unknowns-list { margin-top: 8px; }
+
+  .unknown-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--warn);
+    margin-bottom: 4px;
+  }
+
+  .unknown-item::before {
+    content: '?';
+    width: 14px; height: 14px;
+    background: rgba(255,187,51,0.15);
+    border: 1px solid rgba(255,187,51,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    flex-shrink: 0;
+  }
+
+  /* Pipeline flow diagram */
+  .flow-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 40px;
+    animation: slideUp 0.3s ease both;
+  }
+
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 120px;
+  }
+
+  .step-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .step-label {
+    font-size: 11px;
+    text-align: center;
+    color: var(--muted);
+    line-height: 1.3;
+    max-width: 100px;
+  }
+
+  .flow-arrow {
+    color: var(--muted);
+    font-size: 18px;
+    flex-shrink: 0;
+    padding: 0 4px;
+    margin-bottom: 26px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+
+  .tab {
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+    border: none;
+    background: none;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tab.active {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0;
+    margin-top: 40px;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">C</div>
+        <div>
+          <div class="logo-text">Clara Automation</div>
+          <div class="logo-sub">DEMO CALL → AGENT PIPELINE</div>
+        </div>
+      </div>
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        All Systems Operational
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card green">
+      <div class="stat-label">Accounts Processed</div>
+      <div class="stat-value green">5</div>
+      <div class="stat-desc">5 demo + 5 onboarding calls</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-label">Agent Specs Generated</div>
+      <div class="stat-value purple">10</div>
+      <div class="stat-desc">5 × v1 + 5 × v2</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-label">Total v1→v2 Changes</div>
+      <div class="stat-value orange">32</div>
+      <div class="stat-desc">19 critical · 13 minor</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Extraction Method</div>
+      <div class="stat-value" style="font-size:22px; color: var(--accent);">100%</div>
+      <div class="stat-desc">Zero-cost · Rule-based + LLM fallback</div>
+    </div>
+  </div>
+
+  <!-- Pipeline Architecture -->
+  <div class="section-header">
+    <div class="section-title">Pipeline Architecture</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="flow-diagram">
+    <div style="font-size:11px; color: var(--muted); margin-bottom: 16px; letter-spacing: 0.5px;">PIPELINE A — DEMO CALL → V1 AGENT</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-icon">📄</div>
+        <div class="step-label">Ingest Transcript</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">🧠</div>
+        <div class="step-label">LLM Extract<br><span style="color:var(--accent);font-size:9px">Ollama→Groq→Rules</span></div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">📋</div>
+        <div class="step-label">Account Memo JSON</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">🤖</div>
+        <div class="step-label">Agent Spec v1</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">💾</div>
+        <div class="step-label">Store + Version</div>
+      </div>
+    </div>
+
+    <div style="height: 1px; background: var(--border); margin: 20px 0;"></div>
+
+    <div style="font-size:11px; color: var(--muted); margin-bottom: 16px; letter-spacing: 0.5px;">PIPELINE B — ONBOARDING → V2 AGENT</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-icon">📞</div>
+        <div class="step-label">Onboarding Call</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">🧠</div>
+        <div class="step-label">Extract Confirmed Data</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">🔀</div>
+        <div class="step-label">Merge v1 + Updates</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">📝</div>
+        <div class="step-label">Changelog + Diff</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">🤖</div>
+        <div class="step-label">Agent Spec v2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accounts -->
+  <div class="section-header">
+    <div class="section-title">Processed Accounts</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div id="tabs" style="margin-bottom: 20px;">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('overview')">Overview</button>
+      <button class="tab" onclick="showTab('diffs')">v1 → v2 Diffs</button>
+      <button class="tab" onclick="showTab('prompts')">Agent Prompts</button>
+    </div>
+  </div>
+
+  <div id="tab-overview" class="tab-panel active">
+    <div class="accounts-grid" id="accounts-grid"></div>
+  </div>
+
+  <div id="tab-diffs" class="tab-panel">
+    <div id="diffs-grid"></div>
+  </div>
+
+  <div id="tab-prompts" class="tab-panel">
+    <div id="prompts-list"></div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container" style="display:flex; justify-content:space-between; width:100%">
+    <span>Clara Automation Pipeline · Zero-cost · Fully reproducible</span>
+    <span>Generated: <span id="gen-time"></span></span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('gen-time').textContent = new Date().toLocaleString();
+
+const accounts = [
+  {
+    id: "ACC_001",
+    company: "Shield Fire Protection",
+    location: "Columbus, Ohio",
+    services: ["Fire Suppression", "Sprinkler Systems", "Fire Alarm", "Inspections"],
+    hours: "Mon–Fri 8:00 AM – 5:00 PM Eastern",
+    address: "4820 Morse Road, Columbus, OH 43230",
+    emergency: ["Active sprinkler discharge", "Fire alarm activation", "Active fire", "Smoke detection"],
+    contacts: ["614-555-0192 (Mike, on-call)", "614-555-0100 (Dispatch)"],
+    timeout: "30 seconds",
+    constraints: ["No auto-create sprinkler jobs in ServiceTrade", "No auto-create inspection jobs in ServiceTrade"],
+    unknowns_v1: ["Timezone not in demo", "Emergency definition incomplete"],
+    unknowns_v2: [],
+    changes: [
+      { field: "office_address", old: "null", new: "4820 Morse Road, Columbus, OH 43230", critical: true },
+      { field: "call_transfer_rules.timeout_seconds", old: "null", new: "30", critical: true },
+      { field: "emergency_definition", old: "2 items", new: "5 confirmed items", critical: true },
+      { field: "integration_constraints", old: "1 item", new: "2 specific constraints", critical: false },
+      { field: "notes", old: "null", new: "End emergency calls with 'Help is on the way'", critical: false },
+    ]
+  },
+  {
+    id: "ACC_002",
+    company: "Apex Alarm Systems",
+    location: "Dallas, Texas",
+    services: ["Fire Alarm Systems", "Burglar Alarms", "Access Control", "Monitoring"],
+    hours: "Mon–Fri 7:00 AM – 4:00 PM Central",
+    address: "3901 Lemmon Avenue, Dallas, TX 75219",
+    emergency: ["Fire alarm activation", "System failure/panel offline", "Signal loss", "Intrusion alarm"],
+    contacts: ["972-555-0181 (Primary dispatch)", "972-555-0299 (Backup tech)"],
+    timeout: "30 seconds",
+    constraints: ["No auto-create work orders in ServiceTitan", "Dispatcher handles all ServiceTitan entries manually"],
+    unknowns_v1: ["Business hours start/end not confirmed", "Transfer timeout not specified"],
+    unknowns_v2: [],
+    changes: [
+      { field: "office_address", old: "null", new: "3901 Lemmon Ave, Dallas TX", critical: true },
+      { field: "emergency_routing_rules.contact_order", old: "[972-555-0181]", new: "[972-555-0181, 972-555-0299]", critical: true },
+      { field: "call_transfer_rules.timeout_seconds", old: "null", new: "30", critical: true },
+      { field: "emergency_definition", old: "2 items", new: "4 confirmed items", critical: true },
+      { field: "notes", old: "null", new: "Always confirm callback number before ending call", critical: false },
+      { field: "integration_constraints", old: "ServiceTitan mentioned", new: "No auto work orders — explicit rule", critical: false },
+      { field: "non_emergency_routing_rules", old: "null", new: "Collect name, number, account ID. Next-day callback.", critical: false },
+    ]
+  },
+  {
+    id: "ACC_003",
+    company: "PacWest Fire & Safety",
+    location: "Portland, Oregon",
+    services: ["Fire Extinguisher Service", "Hood Suppression", "Sprinkler Systems", "Inspections"],
+    hours: "Mon–Fri 7:30 AM – 4:30 PM Pacific",
+    address: "1220 NW Naito Pkwy, Portland, OR 97209",
+    emergency: ["Hood suppression activation", "Active fire", "CO detector alarm", "Extinguisher discharge before inspection"],
+    contacts: ["503-555-0147 (Dave Chen, Owner)", "503-555-0163 (Marcus, Lead Tech)"],
+    timeout: "45 seconds",
+    constraints: ["No direct calendar booking", "Never provide pricing quotes to callers"],
+    unknowns_v1: ["Emergency contacts not in demo", "Timeout not specified", "Exact address unknown"],
+    unknowns_v2: [],
+    changes: [
+      { field: "office_address", old: "null", new: "1220 NW Naito Pkwy, Portland OR", critical: true },
+      { field: "call_transfer_rules.timeout_seconds", old: "null", new: "45", critical: true },
+      { field: "emergency_routing_rules.contact_order", old: "null", new: "[503-555-0147, 503-555-0163]", critical: true },
+      { field: "emergency_definition", old: "3 items", new: "4 confirmed items", critical: true },
+      { field: "integration_constraints", old: "Google Calendar mentioned", new: "No auto-booking + no pricing quotes", critical: false },
+      { field: "emergency_routing_rules.fallback", old: "null", new: "Call back within 15 minutes", critical: false },
+    ]
+  },
+  {
+    id: "ACC_004",
+    company: "Cornerstone HVAC Services",
+    location: "Atlanta, Georgia",
+    services: ["HVAC Services", "Maintenance Contracts", "Emergency Repairs"],
+    hours: "Mon–Fri 8:00 AM – 5:00 PM Eastern",
+    address: "567 Peachtree Industrial Blvd, Atlanta, GA 30341",
+    emergency: ["Complete HVAC failure", "Server room cooling failure", "Refrigerant leak", "Business interruption calls"],
+    contacts: ["404-555-0217 (On-call tech)", "404-555-0189 (Sandra, Ops Manager)"],
+    timeout: "30 seconds",
+    constraints: ["No auto-create jobs in ServiceTrade", "Never give out technician names or cell numbers"],
+    unknowns_v1: ["Address not in demo", "Contact numbers not confirmed", "Timeout not specified"],
+    unknowns_v2: [],
+    changes: [
+      { field: "office_address", old: "null", new: "567 Peachtree Industrial Blvd, Atlanta GA", critical: true },
+      { field: "emergency_routing_rules.contact_order", old: "null", new: "[404-555-0217, 404-555-0189]", critical: true },
+      { field: "call_transfer_rules.timeout_seconds", old: "null", new: "30", critical: true },
+      { field: "emergency_definition", old: "2 items", new: "4 confirmed + 'treat any self-reported emergency seriously'", critical: true },
+      { field: "integration_constraints", old: "ServiceTrade mentioned", new: "No auto-create + no tech name disclosure", critical: false },
+      { field: "notes", old: "null", new: "Treat any caller-declared emergency seriously, flag for review", critical: false },
+      { field: "call_transfer_rules.message_if_fails", old: "null", new: "Dispatch within 20 minutes commitment", critical: false },
+    ]
+  },
+  {
+    id: "ACC_005",
+    company: "TrueGuard Electrical",
+    location: "Phoenix, Arizona",
+    services: ["Electrical Services", "Panel Upgrades", "Emergency Repairs", "Lighting"],
+    hours: "Mon–Fri 7:00 AM – 3:30 PM MST (no DST)",
+    address: "2240 W Camelback Road, Phoenix, AZ 85015",
+    emergency: ["Power outage", "Electrical fire/burning smell", "Panel failure", "Live wire exposure", "Generator failure"],
+    contacts: ["480-555-0234 (Primary on-call)", "480-555-0311 (Backup)"],
+    timeout: "25 seconds",
+    constraints: ["No arrival time estimates", "10-minute callback commitment only after failed transfer"],
+    unknowns_v1: ["Address not in demo", "Transfer timeout not specified"],
+    unknowns_v2: [],
+    changes: [
+      { field: "office_address", old: "null", new: "2240 W Camelback Rd, Phoenix AZ", critical: true },
+      { field: "emergency_routing_rules.contact_order", old: "[480-555-0234]", new: "[480-555-0234, 480-555-0311]", critical: true },
+      { field: "call_transfer_rules.timeout_seconds", old: "null", new: "25", critical: true },
+      { field: "emergency_definition", old: "3 items", new: "5 confirmed items incl. generator failure", critical: true },
+      { field: "business_hours.timezone", old: "Mountain Time", new: "Mountain Standard Time (no DST, year-round)", critical: false },
+      { field: "notes", old: "null", new: "End emergency calls with 'Help is on the way'", critical: false },
+      { field: "integration_constraints", old: "null", new: "No arrival time estimates; 10-min callback only", critical: false },
+    ]
+  }
+];
+
+const prompts = {
+  "ACC_001": `You are Clara, a professional and calm AI receptionist for Shield Fire Protection.
+You handle inbound calls for Fire Suppression Systems, Sprinkler Systems, Fire Alarm Systems, and Inspections.
+
+BUSINESS HOURS: Monday through Friday from 8:00 AM to 5:00 PM Eastern Time
+OFFICE ADDRESS: 4820 Morse Road, Columbus, Ohio 43230
+
+═══════════════════════════════════
+BUSINESS HOURS CALL FLOW
+═══════════════════════════════════
+STEP 1 — GREETING:
+"Thank you for calling Shield Fire Protection, this is Clara. How can I help you today?"
+
+STEP 2 — UNDERSTAND PURPOSE:
+Listen for: emergency (sprinkler discharge, fire alarm activation, smoke, active fire) vs service request vs inquiry.
+
+STEP 3 — COLLECT DETAILS:
+"I'd be happy to help. Can I get your name and the best number to reach you?"
+For service calls, also collect service address. Do NOT ask unnecessary questions.
+
+STEP 4 — ROUTE OR TRANSFER:
+Emergencies → follow Emergency Transfer Protocol immediately.
+Service requests → log and confirm callback or schedule.
+
+STEP 5 — TRANSFER FAIL PROTOCOL:
+"I wasn't able to connect you directly, but I've captured your information and someone will call you back shortly."
+
+STEP 6 — WRAP UP:
+"Is there anything else I can help you with today?"
+If no: "Thank you for calling Shield Fire Protection. Have a great day!"
+
+═══════════════════════════════════
+AFTER-HOURS CALL FLOW
+═══════════════════════════════════
+STEP 1: "Thank you for calling Shield Fire Protection. Our office is currently closed. I'm Clara."
+
+STEP 2: "Can you briefly describe what you're calling about?"
+Listen for emergency triggers: active sprinkler discharge, fire alarm going off, smoke, suppression activation, active fire.
+
+STEP 3A — EMERGENCY: "I understand this is urgent. I'm connecting you with our on-call team right now."
+Collect immediately: Full name → Callback number → Property address → Situation description.
+Then attempt transfer to 614-555-0192 (30 sec timeout) → fallback 614-555-0100.
+If both fail: "Help is on the way. Someone will call you back as soon as possible."
+
+STEP 3B — NON-EMERGENCY: Collect name, number, description. "Our team will follow up during business hours."
+
+═══════════════════════════════════
+CONSTRAINTS (NEVER DISCLOSE TO CALLER)
+═══════════════════════════════════
+— Do not automatically create sprinkler jobs in ServiceTrade
+— Do not automatically create inspection jobs in ServiceTrade
+— Do not give out technician names or direct numbers
+— Do not quote prices`,
+};
+
+// Render overview cards
+function renderOverview() {
+  const grid = document.getElementById('accounts-grid');
+  accounts.forEach((acc, i) => {
+    const unknowns = acc.unknowns_v2.length > 0 ? acc.unknowns_v2 : [];
+    const card = document.createElement('div');
+    card.className = 'account-card';
+    card.style.animationDelay = `${0.05 * i}s`;
+    card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="account-id">${acc.id}</div>
+          <div class="company-name">${acc.company}</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:4px">📍 ${acc.location}</div>
+        </div>
+        <div class="version-badges">
+          <span class="badge badge-v1">v1</span>
+          <span class="badge badge-v2">v2 ✓</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="info-key">Hours</span>
+          <span class="info-val">${acc.hours}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Address</span>
+          <span class="info-val">${acc.address}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Services</span>
+          <div class="info-val tag-list">
+            ${acc.services.map(s => `<span class="tag">${s}</span>`).join('')}
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Emergency</span>
+          <div class="info-val tag-list">
+            ${acc.emergency.slice(0,3).map(e => `<span class="tag" style="border-color:rgba(255,75,107,0.2);color:#ff8a9e">${e}</span>`).join('')}
+            ${acc.emergency.length > 3 ? `<span class="tag" style="color:var(--muted)">+${acc.emergency.length-3} more</span>` : ''}
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Routing</span>
+          <span class="info-val" style="color:var(--accent)">${acc.contacts[0]}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Timeout</span>
+          <span class="info-val">${acc.timeout} per attempt</span>
+        </div>
+        ${acc.constraints.length > 0 ? `
+        <div class="info-row">
+          <span class="info-key">Constraints</span>
+          <div class="info-val" style="font-size:11px; color:var(--warn)">
+            ${acc.constraints.map(c => `<div style="margin-bottom:2px">⚠ ${c}</div>`).join('')}
+          </div>
+        </div>` : ''}
+        ${unknowns.length > 0 ? `
+        <div class="info-row">
+          <span class="info-key">Open Qs</span>
+          <div class="unknowns-list">
+            ${unknowns.map(u => `<div class="unknown-item">${u}</div>`).join('')}
+          </div>
+        </div>` : `
+        <div style="margin-top:8px; font-size:11px; color:var(--accent); display:flex; align-items:center; gap:6px">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block"></span>
+          All unknowns resolved in onboarding
+        </div>`}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// Render diffs
+function renderDiffs() {
+  const container = document.getElementById('diffs-grid');
+  accounts.forEach((acc, i) => {
+    const section = document.createElement('div');
+    section.style.cssText = 'margin-bottom: 24px;';
+    const criticalChanges = acc.changes.filter(c => c.critical);
+    const minorChanges = acc.changes.filter(c => !c.critical);
+    section.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px">
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px">${acc.company}</div>
+        <span style="font-size:11px; color:var(--muted)">${acc.id}</span>
+        <span class="change-count">${criticalChanges.length} critical</span>
+        <span class="change-count minor">${minorChanges.length} minor</span>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap:12px">
+        ${acc.changes.map(c => `
+          <div style="background:var(--surface); border:1px solid ${c.critical ? 'rgba(255,75,107,0.15)' : 'var(--border)'}; border-radius:10px; padding:14px">
+            <div style="font-size:10px; color:var(--accent3); margin-bottom:8px; letter-spacing:0.3px">${c.field}</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+              <div class="diff-old">${c.old}</div>
+              <div class="diff-new">${c.new}</div>
+            </div>
+            ${c.critical ? '<div style="margin-top:8px; font-size:10px; color:var(--critical)">⚠ Critical — affects routing/emergency logic</div>' : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(section);
+  });
+}
+
+// Render prompts
+function renderPrompts() {
+  const container = document.getElementById('prompts-list');
+  accounts.forEach(acc => {
+    const div = document.createElement('div');
+    div.style.cssText = 'background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:20px';
+    const promptText = prompts[acc.id] || `[Agent v2 system prompt for ${acc.company}]\n\nYou are Clara, a professional AI receptionist for ${acc.company} handling ${acc.services.join(', ')}.\n\nBusiness Hours: ${acc.hours}\nOffice: ${acc.address}\n\nEmergency triggers: ${acc.emergency.join(', ')}\nRouting: ${acc.contacts.join(' → ')}\nTimeout: ${acc.timeout}\n\n[Full prompt includes business-hours flow, after-hours flow, emergency transfer protocol, and fallback protocol — see agent_spec.json]`;
+    div.innerHTML = `
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px">
+        <div>
+          <div style="font-size:10px; color:var(--accent); letter-spacing:1px; margin-bottom:4px">${acc.id}</div>
+          <div style="font-family:'Syne',sans-serif; font-weight:700">${acc.company} — Agent v2</div>
+        </div>
+        <span class="badge badge-v2">production-ready</span>
+      </div>
+      <div class="prompt-preview">${promptText.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>
+      <div style="margin-top:10px; font-size:11px; color:var(--muted)">Full prompt stored in outputs/accounts/${acc.id}/v2/agent_spec.json → system_prompt field</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`tab-${name}`).classList.add('active');
+}
+
+renderOverview();
+renderDiffs();
+renderPrompts();
+</script>
+</body>
+</html>

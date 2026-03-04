@@ -1,0 +1,76 @@
+{
+  "account_id": "ACC_METRO_SPRINKLER_CO",
+  "from_version": "v1",
+  "to_version": "v2",
+  "generated_at": "2026-03-03T17:18:51.489849+00:00",
+  "change_count": 9,
+  "changes": [
+    {
+      "field": "business_hours.days",
+      "change_type": "modified",
+      "old_value": "Monday To Friday",
+      "new_value": "Monday Through Friday"
+    },
+    {
+      "field": "business_hours.end",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "4 PM"
+    },
+    {
+      "field": "business_hours.start",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "7 AM"
+    },
+    {
+      "field": "business_hours.timezone",
+      "change_type": "modified",
+      "old_value": "America/Chicago",
+      "new_value": "America/New_York"
+    },
+    {
+      "field": "updated_at",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "2026-03-03T17:18:51.489849+00:00"
+    },
+    {
+      "field": "emergency_definition",
+      "change_type": "modified",
+      "old_value": [
+        "pipe burst",
+        "flood"
+      ],
+      "new_value": [
+        "pipe burst",
+        "water leak",
+        "fire"
+      ]
+    },
+    {
+      "field": "onboarding_source",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "onboarding_004_metro_sprinkler.txt"
+    },
+    {
+      "field": "services_supported",
+      "change_type": "modified",
+      "old_value": [
+        "sprinkler"
+      ],
+      "new_value": [
+        "sprinkler",
+        "fire alarm",
+        "inspection"
+      ]
+    },
+    {
+      "field": "call_transfer_rules.timeout_seconds",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": 45
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+Onboarding Call Transcript - Apex Alarm Systems
+
+[Recording starts]
+
+Onboarding Specialist: Let's go through your configuration. Business hours?
+
+Client: Monday through Friday, 7 AM to 4 PM Central Time.
+
+Onboarding Specialist: Office address?
+
+Client: 3901 Lemmon Avenue, Dallas, Texas 75219.
+
+Onboarding Specialist: Emergency definitions?
+
+Client: Fire alarm activation, system failure where monitoring goes offline, any signal loss from a client panel, and intrusion alarm during closed hours.
+
+Onboarding Specialist: Routing for emergencies after hours?
+
+Client: Primary is our dispatch line, 972-555-0181. If that doesn't answer in 30 seconds, try our backup tech line, 972-555-0299. If neither answers, tell the caller to contact local emergency services and that we're paging our team.
+
+Onboarding Specialist: Transfer timeout?
+
+Client: 30 seconds each.
+
+Onboarding Specialist: Non-emergency after hours?
+
+Client: Collect name, number, account number if they have it, and description. We'll call back next business day.
+
+Onboarding Specialist: Integration constraints with ServiceTitan?
+
+Client: Don't create any work orders automatically. Our dispatcher handles all work order creation in ServiceTitan manually. Clara just collects and we handle the rest.
+
+Onboarding Specialist: Anything special about the greeting?
+
+Client: We want it to say "Thank you for calling Apex Alarm Systems" and always confirm the caller's callback number before ending the call.
+
+Onboarding Specialist: Got it. We're all set.
+
+[Recording ends]

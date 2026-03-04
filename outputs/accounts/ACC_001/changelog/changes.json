@@ -1,0 +1,94 @@
+{
+  "account_id": "ACC_001",
+  "company_name": "Shield Fire Protection",
+  "changelog_generated_at": "2026-03-03T11:25:29.432983Z",
+  "v1_source": "demo_call",
+  "v2_source": "onboarding_call",
+  "total_changes": 5,
+  "critical_changes": 3,
+  "minor_changes": 2,
+  "changes": {
+    "critical": [
+      {
+        "field": "emergency_definition",
+        "change_type": "list_updated",
+        "v1_value": [
+          "Active sprinkler discharge",
+          "Active fire on site"
+        ],
+        "v2_value": [
+          "Active sprinkler discharge",
+          "Fire alarm activation",
+          "Smoke detection alarm",
+          "Suppression system activation"
+        ],
+        "added_items": [
+          "Fire alarm activation",
+          "Smoke detection alarm",
+          "Suppression system activation"
+        ],
+        "removed_items": [
+          "Active fire on site"
+        ],
+        "note": "List updated in onboarding"
+      },
+      {
+        "field": "integration_constraints",
+        "change_type": "list_updated",
+        "v1_value": [
+          "All job creation in ServiceTrade/ServiceTitan must be done manually"
+        ],
+        "v2_value": [
+          "Do not automatically create jobs/work orders in field service software",
+          "All job creation in ServiceTrade/ServiceTitan must be done manually"
+        ],
+        "added_items": [
+          "Do not automatically create jobs/work orders in field service software"
+        ],
+        "removed_items": [],
+        "note": "List updated in onboarding"
+      },
+      {
+        "field": "services_supported",
+        "change_type": "list_updated",
+        "v1_value": [
+          "Fire Suppression Systems",
+          "Sprinkler Systems",
+          "Alarm Monitoring",
+          "Fire Alarm Systems",
+          "Inspections"
+        ],
+        "v2_value": [
+          "Inspections",
+          "Fire Alarm Systems",
+          "Sprinkler Systems"
+        ],
+        "added_items": [],
+        "removed_items": [
+          "Fire Suppression Systems",
+          "Alarm Monitoring"
+        ],
+        "note": "List updated in onboarding"
+      }
+    ],
+    "minor": [
+      {
+        "field": "version",
+        "change_type": "added",
+        "v1_value": null,
+        "v2_value": "v2",
+        "note": "New field added in onboarding"
+      },
+      {
+        "field": "version_history",
+        "change_type": "added",
+        "v1_value": null,
+        "v2_value": {
+          "v1_generated_at": "2026-03-03T11:25:29.377996Z",
+          "v2_generated_at": "2026-03-03T11:25:29.432852Z"
+        },
+        "note": "New field added in onboarding"
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "account_id": "ACC_GUARDIAN_ALARM_SYSTEM",
+  "from_version": "v1",
+  "to_version": "v2",
+  "generated_at": "2026-03-03T17:14:51.249846+00:00",
+  "change_count": 5,
+  "changes": [
+    {
+      "field": "company_name",
+      "change_type": "modified",
+      "old_value": "Guardian Alarm Systems",
+      "new_value": "GuardianOS"
+    },
+    {
+      "field": "updated_at",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "2026-03-03T17:14:51.249846+00:00"
+    },
+    {
+      "field": "onboarding_source",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "onboarding_002_guardian_alarm.txt"
+    },
+    {
+      "field": "services_supported",
+      "change_type": "modified",
+      "old_value": [
+        "fire alarm",
+        "monitoring"
+      ],
+      "new_value": [
+        "fire alarm",
+        "inspection",
+        "monitoring"
+      ]
+    },
+    {
+      "field": "call_transfer_rules.timeout_seconds",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": 45
+    }
+  ]
+}

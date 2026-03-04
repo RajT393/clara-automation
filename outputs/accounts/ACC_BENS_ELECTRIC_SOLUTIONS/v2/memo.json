@@ -1,0 +1,68 @@
+{
+  "account_id": "ACC_BENS_ELECTRIC_SOLUTIONS",
+  "company_name": "Ben's Electric Solutions",
+  "version": "v2",
+  "pipeline_source": "onboarding_call",
+  "created_at": "2026-03-03T11:54:51.497692+00:00",
+  "_extraction_method": "structured_parse",
+  "business_hours": {
+    "days": "Monday to Friday",
+    "start": "8:30 AM",
+    "end": "5:00 PM",
+    "timezone": "America/Edmonton"
+  },
+  "office_address": null,
+  "services_supported": [
+    "electrical - residential service calls",
+    "electrical - commercial service calls",
+    "inspections",
+    "quotes and estimates"
+  ],
+  "emergency_definition": [
+    "Caller identifies as G&M Pressure Washing or Shelley Manley",
+    "Gas station emergency (Chevron or Esso property managed by G&M)"
+  ],
+  "emergency_routing_rules": {
+    "primary_contact": "Ben (owner) - via call transfer",
+    "primary_phone": "[BEN_SECOND_NUMBER_PENDING]",
+    "secondary_contact": null,
+    "secondary_phone": null,
+    "fallback": "Leave detailed message, Ben will call back as soon as possible",
+    "exception_client": "G&M Pressure Washing",
+    "exception_contact": "Shelley Manley",
+    "exception_phone": "403-870-8494",
+    "exception_email": "gm_pressurewash@yahoo.ca",
+    "exception_note": "Manages ~20 Chevron and Esso gas stations. If they call after hours for emergency, patch call through to Ben."
+  },
+  "non_emergency_routing_rules": "Collect name, callback number, purpose. Route to Ben via call transfer if available. Otherwise take message for next business day callback.",
+  "call_transfer_rules": {
+    "timeout_seconds": 60,
+    "retries": 1,
+    "on_fail_message": "I was unable to reach Ben directly. I've noted all your details and he will call you back as soon as possible."
+  },
+  "integration_constraints": [
+    "Agent trained on website: benselectricsolutionsteam.com",
+    "Do not proactively mention pricing - only if customer specifically asks",
+    "Do not route contractors in field - they have direct numbers",
+    "Clara targets: new clients, small jobs, service calls, no prior relationship"
+  ],
+  "after_hours_flow_summary": "No emergency service for general public after hours. Exception: G&M Pressure Washing (Shelley Manley, 403-870-8494) - patch through to Ben for gas station emergencies. All others: take message, confirm callback next business day.",
+  "office_hours_flow_summary": "Greet, understand purpose, collect name and callback number. Attempt transfer to Ben if he does not answer. If customer insists on speaking to a person, transfer to Ben second number (pending). Mention pricing only if asked: 15 service call fee, 8/hr residential.",
+  "questions_or_unknowns": [
+    "Ben's second/personal number not yet active - required to enable live call transfer. Ben to provide via email reply."
+  ],
+  "notes": "Onboarding call January 14 2026. Configuration complete pending Ben second number. G&M Pressure Washing is sole after-hours exception. Agent go-live target: weekend after Friday Jan 17 review call.",
+  "updated_at": "2026-03-03T11:55:23.825124+00:00",
+  "pricing_policy": {
+    "service_call_fee": 115,
+    "hourly_rate_residential": 98,
+    "increment": "half-hour",
+    "first_half_hour_after_callout": 49,
+    "mention_policy": "Only mention pricing if customer specifically asks - do not proactively bring it up"
+  },
+  "notification_preferences": {
+    "email": "info@benselectricsolutionsteam.com",
+    "sms": "Ben main business line",
+    "trigger": "After every call"
+  }
+}

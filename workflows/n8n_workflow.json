@@ -1,0 +1,167 @@
+{
+  "name": "Clara Automation Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pipeline-a",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-pipeline-a",
+      "name": "Webhook: Pipeline A",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "notes": "Trigger Pipeline A with: {\"transcript\": \"<text>\", \"account_id\": \"optional\"}"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pipeline-b",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-pipeline-b",
+      "name": "Webhook: Pipeline B",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 500],
+      "notes": "Trigger Pipeline B with: {\"transcript\": \"<text>\", \"account_id\": \"ACC_XXX\"}"
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.OLLAMA_URL }}/api/generate",
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"model\": \"{{ $env.OLLAMA_MODEL }}\",\n  \"prompt\": \"{{ $json.extraction_prompt }}\",\n  \"stream\": false,\n  \"options\": { \"temperature\": 0.1 }\n}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "ollama-extract",
+      "name": "Ollama: Extract Memo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [480, 300],
+      "notes": "Calls local Ollama for LLM extraction"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.statusCode }}",
+              "operation": "notEqual",
+              "value2": "200"
+            }
+          ]
+        }
+      },
+      "id": "check-ollama",
+      "name": "Ollama Succeeded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"model\": \"llama3-8b-8192\",\n  \"messages\": [{\"role\": \"user\", \"content\": \"{{ $json.extraction_prompt }}\"}],\n  \"temperature\": 0.1\n}",
+        "options": {}
+      },
+      "id": "groq-fallback",
+      "name": "Groq: Fallback Extract",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [920, 400],
+      "notes": "Free Groq API fallback if Ollama unavailable"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse LLM response and build account memo\nconst raw = items[0].json.response || \n            items[0].json.choices?.[0]?.message?.content || '';\n\nlet memo = {};\ntry {\n  const cleaned = raw.replace(/```json|```/g, '').trim();\n  memo = JSON.parse(cleaned);\n} catch(e) {\n  // Rule-based fallback for critical fields\n  memo = {\n    company_name: null,\n    business_hours: { days: null, start: null, end: null, timezone: null },\n    emergency_definition: [],\n    emergency_routing_rules: { primary_phone: null, fallback: null },\n    questions_or_unknowns: ['LLM parsing failed - manual review required'],\n    notes: 'Fallback extraction'\n  };\n}\n\n// Add metadata\nconst accountId = $input.first().json.account_id || \n  'ACC_' + Date.now().toString(36).toUpperCase();\n\nmemo.account_id = accountId;\nmemo.version = 'v1';\nmemo.created_at = new Date().toISOString();\nmemo.pipeline_source = 'demo_call';\n\nreturn [{ json: { memo, account_id: accountId } }];"
+      },
+      "id": "build-memo",
+      "name": "Build Account Memo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1140, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate Retell Agent Spec from memo\nconst memo = items[0].json.memo;\nconst accountId = items[0].json.account_id;\n\nconst bh = memo.business_hours || {};\nconst routing = memo.emergency_routing_rules || {};\nconst transfer = memo.call_transfer_rules || {};\nconst company = memo.company_name || 'the company';\n\nconst agentSpec = {\n  agent_name: `Clara - ${company} (v1)`,\n  account_id: accountId,\n  version: 'v1',\n  created_at: new Date().toISOString(),\n  voice_style: {\n    provider: 'elevenlabs',\n    voice_id: 'rachel',\n    style: 'professional'\n  },\n  key_variables: {\n    timezone: bh.timezone || '[TIMEZONE_REQUIRED]',\n    business_hours_days: bh.days || '[DAYS_REQUIRED]',\n    business_hours_start: bh.start || '[START_REQUIRED]',\n    business_hours_end: bh.end || '[END_REQUIRED]',\n    emergency_primary_phone: routing.primary_phone || '[PHONE_REQUIRED]',\n    company_name: company\n  },\n  call_transfer_protocol: {\n    timeout_seconds: transfer.timeout_seconds || 60,\n    method: 'warm_transfer',\n    on_fail: transfer.on_fail_message || 'I was unable to reach our team. Someone will call you back shortly.'\n  },\n  retell_config_notes: {\n    begin_message: `Thank you for calling ${company}. This is Clara. How can I help you today?`,\n    language: 'en-US',\n    max_call_duration_seconds: 600\n  }\n};\n\nreturn [{ json: { memo, agent_spec: agentSpec, account_id: accountId } }];"
+      },
+      "id": "generate-spec",
+      "name": "Generate Agent Spec",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1360, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Write memo and spec to outputs directory\nconst fs = require('fs');\nconst path = require('path');\n\nconst { memo, agent_spec, account_id } = items[0].json;\n\nconst outputDir = path.join('/home/user/clara-automation/outputs/accounts', account_id, 'v1');\nfs.mkdirSync(outputDir, { recursive: true });\n\nfs.writeFileSync(path.join(outputDir, 'memo.json'), JSON.stringify(memo, null, 2));\nfs.writeFileSync(path.join(outputDir, 'agent_spec.json'), JSON.stringify(agent_spec, null, 2));\n\nreturn [{ json: { \n  status: 'saved',\n  account_id,\n  memo_path: path.join(outputDir, 'memo.json'),\n  spec_path: path.join(outputDir, 'agent_spec.json')\n}}];"
+      },
+      "id": "save-outputs",
+      "name": "Save to Outputs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1580, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}"
+      },
+      "id": "respond-a",
+      "name": "Respond Pipeline A",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1800, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pipeline B: Merge onboarding into v1 and produce v2\nconst fs = require('fs');\nconst path = require('path');\n\nconst { account_id, onboarding_data } = items[0].json;\n\n// Load v1\nconst v1Path = path.join('/home/user/clara-automation/outputs/accounts', account_id, 'v1', 'memo.json');\nif (!fs.existsSync(v1Path)) {\n  return [{ json: { status: 'error', reason: 'v1_not_found', account_id } }];\n}\n\nconst v1 = JSON.parse(fs.readFileSync(v1Path, 'utf8'));\nconst v2 = JSON.parse(JSON.stringify(v1)); // deep clone\n\n// Smart merge: only override non-null values\nfunction smartMerge(target, source) {\n  for (const [k, v] of Object.entries(source)) {\n    if (['_extraction_method','created_at','version','pipeline_source','account_id'].includes(k)) continue;\n    if (v === null || v === undefined) continue;\n    if (Array.isArray(v) && v.length === 0) continue;\n    if (typeof v === 'object' && !Array.isArray(v) && typeof target[k] === 'object') {\n      smartMerge(target[k], v);\n    } else {\n      target[k] = v;\n    }\n  }\n}\n\nsmartMerge(v2, onboarding_data);\nv2.version = 'v2';\nv2.updated_at = new Date().toISOString();\n\n// Compute diff\nconst changes = [];\nfunction diff(o, n, p='') {\n  const keys = new Set([...Object.keys(o), ...Object.keys(n)]);\n  for (const k of keys) {\n    const fp = p ? `${p}.${k}` : k;\n    if (['_extraction_method','created_at','version','updated_at'].includes(k)) continue;\n    if (JSON.stringify(o[k]) !== JSON.stringify(n[k])) {\n      if (typeof o[k] === 'object' && typeof n[k] === 'object' && o[k] && n[k]) {\n        diff(o[k], n[k], fp);\n      } else {\n        changes.push({ field: fp, old_value: o[k], new_value: n[k] });\n      }\n    }\n  }\n}\ndiff(v1, v2);\n\nreturn [{ json: { v1, v2, changes, account_id } }];"
+      },
+      "id": "merge-onboarding",
+      "name": "Merge Onboarding -> v2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Save v2 and generate changelog\nconst fs = require('fs');\nconst path = require('path');\n\nconst { v2, changes, account_id } = items[0].json;\n\nconst v2Dir = path.join('/home/user/clara-automation/outputs/accounts', account_id, 'v2');\nfs.mkdirSync(v2Dir, { recursive: true });\n\nfs.writeFileSync(path.join(v2Dir, 'memo.json'), JSON.stringify(v2, null, 2));\n\n// Generate changelog markdown\nconst lines = [\n  `# Changelog: ${account_id}`,\n  `## v1 → v2`,\n  `Generated: ${new Date().toISOString()}`,\n  `Total changes: ${changes.length}`,\n  '',\n  '## Changes',\n  ''\n];\nfor (const c of changes) {\n  lines.push(`### \\`${c.field}\\``);\n  lines.push(`- Before: \\`${c.old_value}\\``);\n  lines.push(`- After: \\`${c.new_value}\\``);\n  lines.push('');\n}\n\nfs.writeFileSync(path.join(v2Dir, 'changes.md'), lines.join('\\n'));\nfs.writeFileSync(path.join(v2Dir, 'changes.json'), JSON.stringify({ account_id, changes }, null, 2));\n\nreturn [{ json: { status: 'success', account_id, change_count: changes.length } }];"
+      },
+      "id": "save-v2",
+      "name": "Save v2 + Changelog",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 500]
+    }
+  ],
+  "connections": {
+    "Webhook: Pipeline A": { "main": [[{ "node": "Ollama: Extract Memo", "type": "main", "index": 0 }]] },
+    "Ollama: Extract Memo": { "main": [[{ "node": "Ollama Succeeded?", "type": "main", "index": 0 }]] },
+    "Ollama Succeeded?": {
+      "main": [
+        [{ "node": "Groq: Fallback Extract", "type": "main", "index": 0 }],
+        [{ "node": "Build Account Memo", "type": "main", "index": 0 }]
+      ]
+    },
+    "Groq: Fallback Extract": { "main": [[{ "node": "Build Account Memo", "type": "main", "index": 0 }]] },
+    "Build Account Memo": { "main": [[{ "node": "Generate Agent Spec", "type": "main", "index": 0 }]] },
+    "Generate Agent Spec": { "main": [[{ "node": "Save to Outputs", "type": "main", "index": 0 }]] },
+    "Save to Outputs": { "main": [[{ "node": "Respond Pipeline A", "type": "main", "index": 0 }]] },
+    "Webhook: Pipeline B": { "main": [[{ "node": "Merge Onboarding -> v2", "type": "main", "index": 0 }]] },
+    "Merge Onboarding -> v2": { "main": [[{ "node": "Save v2 + Changelog", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": ["clara", "automation", "voice-agent"],
+  "meta": {
+    "instanceId": "clara-automation-pipeline",
+    "description": "Clara Answers: Demo Call -> Agent v1, Onboarding -> Agent v2"
+  }
+}

@@ -1,0 +1,17 @@
+[Onboarding Call - Metro Sprinkler Co]
+Specialist: Metro Sprinkler onboarding. Confirming all details.
+Client: Yes. Metro Sprinkler Co LLC, Chicago.
+Specialist: Exact business hours?
+Client: Monday through Friday, 7 AM to 4 PM Central Time. We are closed on holidays.
+Specialist: Emergency definition final list?
+Client: Active sprinkler head discharge, pipe burst or visible water leak from system, system pressure below 10 PSI, fire alarm integrated with sprinkler showing active, post-indicator valve found closed, total system offline.
+Specialist: Emergency contacts confirmed?
+Client: Primary is our dispatch line, 312-555-0155. It is monitored around the clock. Backup is the field supervisor at 312-555-0166.
+Specialist: Timeout?
+Client: 45 seconds on primary. Then try backup. If backup fails, tell the caller our team is being notified via emergency pager and someone will call within 20 minutes.
+Specialist: Systems and constraints?
+Client: We are not using any field management software currently. No integrations needed. We are planning to move to ServiceTrade next quarter but nothing to configure now.
+Specialist: Non-emergency?
+Client: Inspection requests, service calls, quotes - take message and call back next business day.
+Specialist: Address?
+Client: 330 North Michigan Avenue, Suite 800, Chicago Illinois 60601.

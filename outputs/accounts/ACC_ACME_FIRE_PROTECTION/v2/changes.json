@@ -1,0 +1,85 @@
+{
+  "account_id": "ACC_ACME_FIRE_PROTECTION",
+  "from_version": "v1",
+  "to_version": "v2",
+  "generated_at": "2026-03-03T17:12:51.141507+00:00",
+  "change_count": 9,
+  "changes": [
+    {
+      "field": "business_hours.end",
+      "change_type": "modified",
+      "old_value": "5 PM",
+      "new_value": "5:30 PM"
+    },
+    {
+      "field": "business_hours.start",
+      "change_type": "modified",
+      "old_value": "8 AM",
+      "new_value": "7:30 AM"
+    },
+    {
+      "field": "company_name",
+      "change_type": "modified",
+      "old_value": "Acme Fire Protection based in Columbus Ohio",
+      "new_value": "Acme Fire Protection"
+    },
+    {
+      "field": "updated_at",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "2026-03-03T17:12:51.141507+00:00"
+    },
+    {
+      "field": "integration_constraints",
+      "change_type": "modified",
+      "old_value": [
+        "Never create a sprinkler job in ServiceTrade automatically."
+      ],
+      "new_value": [
+        "Do not create any jobs in ServiceTrade automatically."
+      ]
+    },
+    {
+      "field": "emergency_definition",
+      "change_type": "modified",
+      "old_value": [
+        "sprinkler leak",
+        "pipe burst",
+        "fire"
+      ],
+      "new_value": [
+        "pipe burst",
+        "system failure",
+        "fire"
+      ]
+    },
+    {
+      "field": "onboarding_source",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": "onboarding_001_acme_fire.txt"
+    },
+    {
+      "field": "services_supported",
+      "change_type": "modified",
+      "old_value": [
+        "fire protection",
+        "sprinkler",
+        "fire alarm",
+        "suppression",
+        "inspection"
+      ],
+      "new_value": [
+        "fire protection",
+        "sprinkler",
+        "fire alarm"
+      ]
+    },
+    {
+      "field": "call_transfer_rules.timeout_seconds",
+      "change_type": "added",
+      "old_value": null,
+      "new_value": 60
+    }
+  ]
+}

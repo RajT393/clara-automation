@@ -1,0 +1,29 @@
+Demo Call Transcript - Prospect: PacWest Fire & Safety
+
+[Recording starts]
+
+Sales Rep: Good afternoon. Thanks for joining. Tell me about PacWest.
+
+Prospect: We're PacWest Fire and Safety. We're based in Portland, Oregon. We do fire extinguisher service, hood suppression systems for restaurants, and some sprinkler work. Mostly commercial clients.
+
+Sales Rep: And how do you handle your inbound calls?
+
+Prospect: Our office is open Monday through Friday, 7:30 AM to 4:30 PM Pacific. We have two people on the phones. After hours we just forward to a cell phone, but it doesn't always get answered.
+
+Sales Rep: What do you consider emergency situations for your business?
+
+Prospect: If a restaurant's hood suppression system activates, that's an emergency. If someone's fire extinguisher is discharged and they need immediate service before a health inspection, that could be urgent too. And obviously any active fire situation.
+
+Sales Rep: Any particular routing setup you're thinking about?
+
+Prospect: For emergencies, we'd want it to go to our owner, Dave, first. He's usually available. If not, to our lead tech. We don't have a formal dispatch line yet.
+
+Sales Rep: Any software integrations we should be aware of?
+
+Prospect: We're pretty basic. We use QuickBooks for invoicing and a shared Google Calendar for scheduling. Nothing too complex.
+
+Sales Rep: What's the most important thing Clara could solve for you?
+
+Prospect: Never missing an emergency call. And making sure every caller, even for small stuff, feels like they talked to a real professional.
+
+[Recording ends]

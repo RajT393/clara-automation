@@ -1,0 +1,29 @@
+Demo Call Transcript - Prospect: Apex Alarm Systems
+
+[Recording starts]
+
+Sales Rep: Thanks for taking the time today. Can you tell me about your business?
+
+Prospect: We're Apex Alarm Systems, out of Dallas, Texas. We install and monitor commercial fire alarms, burglar alarms, and access control systems. We've been in business about 15 years.
+
+Sales Rep: How are you handling calls right now?
+
+Prospect: We have a small office team. They work 7 AM to 4 PM Central, Monday through Friday. After that, calls go to an answering service, but honestly the quality is terrible. Clients complain all the time that messages never get passed along.
+
+Sales Rep: What kinds of emergencies come up for your clients?
+
+Prospect: Alarm activations are the big one. If a commercial fire alarm goes off at a client site, they're panicking and need us fast. Also system failures, if a monitoring panel goes offline. Those are both emergency situations.
+
+Sales Rep: Who handles those after hours?
+
+Prospect: We have an on-call rotation. The on-call tech's number changes weekly. But the dispatch number is always the same: 972-555-0181.
+
+Sales Rep: Do you use any software for ticketing?
+
+Prospect: We use ServiceTitan for all our work orders and scheduling.
+
+Sales Rep: And what's the main thing you want improved?
+
+Prospect: Consistency. Every caller should get a professional response, have their info taken correctly, and know exactly what's going to happen next. Right now it's all over the place.
+
+[Recording ends]

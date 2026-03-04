@@ -1,0 +1,51 @@
+{
+  "company_name": "Reliable Fire Protection Inc.",
+  "business_hours": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "start": "07:00",
+    "end": "16:00",
+    "timezone": "Mountain Time"
+  },
+  "office_address": null,
+  "services_supported": [
+    "fire protection work"
+  ],
+  "emergency_definition": [
+    "active sprinkler discharge",
+    "fire alarm triggered",
+    "suppression system failure"
+  ],
+  "emergency_routing_rules": {
+    "primary_contact": "dispatch",
+    "primary_phone": "303-555-0177",
+    "secondary_contact": null,
+    "secondary_phone": null,
+    "fallback": null
+  },
+  "non_emergency_routing_rules": null,
+  "call_transfer_rules": {
+    "timeout_seconds": null,
+    "retries": null,
+    "on_fail_message": null
+  },
+  "integration_constraints": [],
+  "after_hours_flow_summary": null,
+  "office_hours_flow_summary": null,
+  "questions_or_unknowns": [
+    "how to manage calls"
+  ],
+  "notes": null,
+  "_extraction_method": "ollama",
+  "account_id": "ACC_TEST_MISSING",
+  "pipeline_source": "demo_call",
+  "created_at": "2026-03-03T17:58:05.736924+00:00",
+  "version": "v2",
+  "updated_at": "2026-03-03T17:59:44.292636+00:00",
+  "onboarding_source": "test_ACC_TEST_MISSING.txt"
+}

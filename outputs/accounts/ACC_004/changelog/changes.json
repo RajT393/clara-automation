@@ -1,0 +1,103 @@
+{
+  "account_id": "ACC_004",
+  "company_name": "Cornerstone HVAC Services",
+  "changelog_generated_at": "2026-03-03T11:25:29.453423Z",
+  "v1_source": "demo_call",
+  "v2_source": "onboarding_call",
+  "total_changes": 7,
+  "critical_changes": 4,
+  "minor_changes": 3,
+  "changes": {
+    "critical": [
+      {
+        "field": "emergency_definition",
+        "change_type": "list_updated",
+        "v1_value": [
+          "System failure",
+          "Server room cooling failure",
+          "HVAC system failure"
+        ],
+        "v2_value": [
+          "System failure",
+          "Server room cooling failure",
+          "Refrigerant leak",
+          "HVAC system failure"
+        ],
+        "added_items": [
+          "Refrigerant leak"
+        ],
+        "removed_items": [],
+        "note": "List updated in onboarding"
+      },
+      {
+        "field": "integration_constraints",
+        "change_type": "list_updated",
+        "v1_value": [
+          "Servicetrade integration in use \u2014 see constraints above"
+        ],
+        "v2_value": [
+          "Do not automatically create jobs/work orders in field service software",
+          "Do not give out technician names or direct contact numbers",
+          "Servicetrade integration in use \u2014 see constraints above"
+        ],
+        "added_items": [
+          "Do not automatically create jobs/work orders in field service software",
+          "Do not give out technician names or direct contact numbers"
+        ],
+        "removed_items": [],
+        "note": "List updated in onboarding"
+      },
+      {
+        "field": "non_emergency_routing_rules",
+        "change_type": "updated",
+        "v1_value": null,
+        "v2_value": "Collect name, phone number, and description. Confirm follow-up during next business hours. Do not attempt transfer.",
+        "significance": "critical",
+        "note": "Confirmed in onboarding call \u2014 overrides demo assumption"
+      },
+      {
+        "field": "services_supported",
+        "change_type": "list_updated",
+        "v1_value": [
+          "HVAC Services",
+          "Maintenance Contracts"
+        ],
+        "v2_value": [
+          "HVAC Services"
+        ],
+        "added_items": [],
+        "removed_items": [
+          "Maintenance Contracts"
+        ],
+        "note": "List updated in onboarding"
+      }
+    ],
+    "minor": [
+      {
+        "field": "company_name",
+        "change_type": "updated",
+        "v1_value": "Cornerstone HVAC",
+        "v2_value": "Cornerstone HVAC Services",
+        "significance": "minor",
+        "note": "Updated with precise onboarding data"
+      },
+      {
+        "field": "version",
+        "change_type": "added",
+        "v1_value": null,
+        "v2_value": "v2",
+        "note": "New field added in onboarding"
+      },
+      {
+        "field": "version_history",
+        "change_type": "added",
+        "v1_value": null,
+        "v2_value": {
+          "v1_generated_at": "2026-03-03T11:25:29.393381Z",
+          "v2_generated_at": "2026-03-03T11:25:29.453338Z"
+        },
+        "note": "New field added in onboarding"
+      }
+    ]
+  }
+}

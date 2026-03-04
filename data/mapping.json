@@ -1,0 +1,27 @@
+[
+  {
+    "demo": "demo_001_acme_fire.txt",
+    "onboarding": "onboarding_001_acme_fire.txt",
+    "account_id": "ACC_ACME_FIRE_PROTECTION"
+  },
+  {
+    "demo": "demo_002_guardian_alarm.txt",
+    "onboarding": "onboarding_002_guardian_alarm.txt",
+    "account_id": "ACC_GUARDIAN_ALARM_SYSTEM"
+  },
+  {
+    "demo": "demo_003_premier_hvac.txt",
+    "onboarding": "onboarding_003_premier_hvac.txt",
+    "account_id": "ACC_PREMIER_HVAC_SERVICES"
+  },
+  {
+    "demo": "demo_004_metro_sprinkler.txt",
+    "onboarding": "onboarding_004_metro_sprinkler.txt",
+    "account_id": "ACC_METRO_SPRINKLER_CO"
+  },
+  {
+    "demo": "demo_005_allied_fire.txt",
+    "onboarding": "onboarding_005_allied_fire.txt",
+    "account_id": "ACC_ALLIED_FIRE_SAFETY"
+  }
+]

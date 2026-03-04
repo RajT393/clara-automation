@@ -1,0 +1,18 @@
+[Onboarding Call - Allied Fire and Safety]
+Specialist: Allied Fire and Safety onboarding call. Let us confirm everything.
+Client: Allied Fire and Safety Inc, Seattle Washington.
+Specialist: Business hours?
+Client: Monday through Friday, 8 AM to 5 PM Pacific Time. No weekend coverage.
+Specialist: Emergency tiers - you mentioned suppression vs extinguisher?
+Client: Tier 1 immediate emergency: fire suppression system activation or failure, kitchen hood suppression discharge, CO2 or clean agent system discharge. Page Rick immediately.
+Client: Tier 2 next business day: portable extinguisher issues, inspection reminders, non-urgent service requests.
+Specialist: Routing for Tier 1?
+Client: Rick Alvarez, 206-555-0177. He is our suppression specialist. No backup has been assigned yet.
+Specialist: What if Rick does not answer?
+Client: Leave him a page and tell the caller our specialist has been notified and will call back within 45 minutes. Also send an email to dispatch at dispatch@alliedfiresafety.com.
+Specialist: ServiceTrade constraints?
+Client: Absolutely no automatic job creation. The previous vendor created duplicate jobs and it caused a billing nightmare. Strict rule.
+Specialist: Address?
+Client: 4521 Aurora Avenue North, Seattle Washington 98103.
+Specialist: Anything else?
+Client: We want the agent to always confirm the caller is safe and not in immediate physical danger before proceeding with any routing.

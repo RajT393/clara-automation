@@ -1,0 +1,27 @@
+{
+  "run_at": "2026-03-03T23:33:32.023572",
+  "results": [
+    {
+      "test": "Normal electrical company",
+      "method": "python",
+      "passed": true
+    },
+    {
+      "test": "Missing data edge case",
+      "method": "python",
+      "passed": true
+    },
+    {
+      "test": "Complex after-hours routing",
+      "method": "python",
+      "passed": true
+    },
+    {
+      "test": "Normal electrical company",
+      "method": "n8n",
+      "passed": false
+    }
+  ],
+  "passed": 3,
+  "total": 4
+}

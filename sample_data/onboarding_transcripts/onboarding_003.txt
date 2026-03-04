@@ -1,0 +1,33 @@
+Onboarding Call Transcript - PacWest Fire & Safety
+
+[Recording starts]
+
+Onboarding Specialist: Let's lock in your configuration. Business hours?
+
+Client: Monday to Friday, 7:30 AM to 4:30 PM Pacific Time.
+
+Onboarding Specialist: Office address?
+
+Client: 1220 NW Naito Parkway, Portland, Oregon 97209.
+
+Onboarding Specialist: Emergency types?
+
+Client: Hood suppression system activation, active fire at client site, any fire extinguisher with visible damage or discharge that needs immediate inspection before regulatory visit, and CO detector alarm.
+
+Onboarding Specialist: Emergency routing?
+
+Client: First try Dave Chen, our owner: 503-555-0147. If no answer in 45 seconds, try Marcus, lead tech: 503-555-0163. If neither, tell the caller someone will call them within 15 minutes and log it as urgent.
+
+Onboarding Specialist: After-hours non-emergency?
+
+Client: Take name, number, service address, and brief description. Confirm follow-up next business day.
+
+Onboarding Specialist: Any system constraints?
+
+Client: We don't use ServiceTrade or ServiceTitan. We use Google Calendar for scheduling. Clara should NOT book anything in the calendar directly. Just collect and we schedule manually.
+
+Onboarding Specialist: Understood. Anything else?
+
+Client: Yes — if anyone asks about pricing, Clara should never give a quote. Just say a specialist will follow up with details.
+
+[Recording ends]

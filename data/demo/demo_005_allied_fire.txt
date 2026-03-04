@@ -1,0 +1,12 @@
+[Demo Call - Allied Fire and Safety]
+Client: We are Allied Fire and Safety serving greater Seattle area. Fire extinguisher service, suppression systems, kitchen hood cleaning.
+Sales Rep: Current call handling?
+Client: Receptionist handles everything during the day. After hours we have an answering machine nobody checks until morning.
+Sales Rep: Emergency handling?
+Client: Fire suppression system down or kitchen hood situation needs someone paged immediately. Extinguisher stuff can wait until morning.
+Sales Rep: Business hours?
+Client: Monday through Friday, 8 to 5 Pacific time. Closed weekends.
+Sales Rep: Emergency contacts?
+Client: For suppression emergencies Rick at 206-555-0177. Extinguisher and inspections can go to voicemail.
+Sales Rep: Software?
+Client: We use ServiceTrade. No automatic job creation please. We had a billing issue from that.

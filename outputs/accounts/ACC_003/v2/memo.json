@@ -1,0 +1,63 @@
+{
+  "account_id": "ACC_003",
+  "company_name": "PacWest Fire and Safety",
+  "business_hours": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "start": "7:30 AM",
+    "end": "4:30 PM",
+    "timezone": "Pacific Time"
+  },
+  "office_address": null,
+  "services_supported": [
+    "Inspections",
+    "Hood Suppression Systems",
+    "Fire Extinguisher Service"
+  ],
+  "emergency_definition": [
+    "Active fire on site",
+    "Suppression system activation",
+    "CO detector alarm"
+  ],
+  "emergency_routing_rules": {
+    "primary_contact": "503-555-0163",
+    "contact_order": [
+      "503-555-0163"
+    ],
+    "fallback": null
+  },
+  "non_emergency_routing_rules": "Collect name, phone number, and description. Confirm follow-up during next business hours. Do not attempt transfer.",
+  "call_transfer_rules": {
+    "timeout_seconds": 45,
+    "retries": 1,
+    "message_if_fails": "5-0163. If neither, tell the caller someone will call them within 15 minutes and log it as urgent.\n\nOnboarding Specialist: After-hours non-emergency"
+  },
+  "integration_constraints": [
+    "All job creation in ServiceTrade/ServiceTitan must be done manually",
+    "Do not provide pricing quotes to callers",
+    "Do not book or schedule appointments directly",
+    "Google Calendar integration in use \u2014 see constraints above"
+  ],
+  "after_hours_flow_summary": "Greet caller. Identify if emergency or non-emergency. If emergency: collect name, number, address, then attempt transfer per routing rules. If transfer fails: inform caller team has been paged. If non-emergency: collect details and confirm next-business-day callback.",
+  "office_hours_flow_summary": "Greet caller professionally. Understand purpose. Collect name and callback number. Route to appropriate team member or log for follow-up.",
+  "questions_or_unknowns": [
+    "Emergency contact phone numbers not provided",
+    "Transfer timeout duration not specified",
+    "Office address not confirmed (expected \u2014 demo call)"
+  ],
+  "notes": null,
+  "_extraction_method": "rule_based_enhanced",
+  "source_file": "onboarding_003.txt",
+  "call_type": "onboarding",
+  "extracted_at": "2026-03-03T11:25:29.446216Z",
+  "version": "v2",
+  "version_history": {
+    "v1_generated_at": "2026-03-03T11:25:29.388770Z",
+    "v2_generated_at": "2026-03-03T11:25:29.446224Z"
+  }
+}

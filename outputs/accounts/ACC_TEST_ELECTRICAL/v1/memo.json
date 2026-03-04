@@ -1,0 +1,42 @@
+{
+  "company_name": null,
+  "business_hours": {
+    "days": "Monday To Friday",
+    "start": "8AM",
+    "end": "5PM",
+    "timezone": "America/Chicago"
+  },
+  "office_address": null,
+  "services_supported": [
+    "electrical"
+  ],
+  "emergency_definition": [],
+  "emergency_routing_rules": {
+    "primary_contact": null,
+    "primary_phone": "713-555-0100",
+    "secondary_contact": null,
+    "secondary_phone": null,
+    "fallback": null
+  },
+  "non_emergency_routing_rules": null,
+  "call_transfer_rules": {
+    "timeout_seconds": null,
+    "retries": null,
+    "on_fail_message": null
+  },
+  "integration_constraints": [
+    "never create jobs automatically."
+  ],
+  "after_hours_flow_summary": null,
+  "office_hours_flow_summary": null,
+  "questions_or_unknowns": [
+    "Company name not clearly stated",
+    "Emergency trigger conditions not clearly defined"
+  ],
+  "notes": "Extracted via rule-based fallback. Manual review recommended.",
+  "_extraction_method": "rule_based",
+  "account_id": "ACC_TEST_ELECTRICAL",
+  "pipeline_source": "demo_call",
+  "created_at": "2026-03-03T17:55:35.049521+00:00",
+  "version": "v1"
+}

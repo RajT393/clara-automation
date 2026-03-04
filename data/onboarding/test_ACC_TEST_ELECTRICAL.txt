@@ -1,0 +1,10 @@
+
+Confirmed company name: ABC Electrical Solutions LLC.
+Exact hours: 8:30 AM to 5:30 PM Central Time Monday through Friday.
+Emergency triggers confirmed: live exposed wire, complete power outage in commercial building,
+electrical fire or burning smell, generator failure at critical facility.
+Transfer timeout: 45 seconds then fallback message.
+Office address: 4500 Main Street Suite 200 Houston Texas 77002.
+Fallback message: Our emergency team has been notified and will call you back within 20 minutes.
+ServiceTrade constraint confirmed: never create any job automatically.
+        

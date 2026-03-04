@@ -1,0 +1,59 @@
+{
+  "account_id": "ACC_002",
+  "company_name": "Apex Alarm Systems",
+  "business_hours": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "start": "7:00 AM",
+    "end": "4:00 PM",
+    "timezone": "Central Time"
+  },
+  "office_address": null,
+  "services_supported": [
+    "Fire Alarm Systems",
+    "Panel Services"
+  ],
+  "emergency_definition": [
+    "Fire alarm activation",
+    "System failure"
+  ],
+  "emergency_routing_rules": {
+    "primary_contact": "972-555-0181",
+    "contact_order": [
+      "972-555-0181",
+      "972-555-0299"
+    ],
+    "fallback": "Inform caller our team has been paged and will follow up as soon as possible."
+  },
+  "non_emergency_routing_rules": "Collect name, phone number, and description. Confirm follow-up during next business hours. Do not attempt transfer.",
+  "call_transfer_rules": {
+    "timeout_seconds": 30,
+    "retries": 1,
+    "message_if_fails": "If neither answers, tell the caller to contact local emergency services and that we're paging our team.\n\nOnboarding Specialist: Transfer timeout?\n\nClient: 30 seconds each.\n\nOnboarding Sp"
+  },
+  "integration_constraints": [
+    "Do not automatically create jobs/work orders in field service software",
+    "All job creation in ServiceTrade/ServiceTitan must be done manually"
+  ],
+  "after_hours_flow_summary": "Greet caller. Identify if emergency or non-emergency. If emergency: collect name, number, address, then attempt transfer per routing rules. If transfer fails: inform caller team has been paged. If non-emergency: collect details and confirm next-business-day callback.",
+  "office_hours_flow_summary": "Greet caller professionally. Understand purpose. Collect name and callback number. Route to appropriate team member or log for follow-up.",
+  "questions_or_unknowns": [
+    "Transfer timeout duration not specified",
+    "Office address not confirmed (expected \u2014 demo call)"
+  ],
+  "notes": "Always confirm callback number before ending call",
+  "_extraction_method": "rule_based_enhanced",
+  "source_file": "onboarding_002.txt",
+  "call_type": "onboarding",
+  "extracted_at": "2026-03-03T11:25:29.439835Z",
+  "version": "v2",
+  "version_history": {
+    "v1_generated_at": "2026-03-03T11:25:29.383237Z",
+    "v2_generated_at": "2026-03-03T11:25:29.439843Z"
+  }
+}

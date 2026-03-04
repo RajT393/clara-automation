@@ -1,0 +1,45 @@
+{
+  "run_at": "2026-03-03T11:25:29.368856Z",
+  "accounts": [
+    {
+      "account_id": "ACC_001",
+      "company": "Shield Fire Protection",
+      "v1_unknowns": 2,
+      "v2_unknowns": 2,
+      "total_changes": 5,
+      "critical_changes": 3
+    },
+    {
+      "account_id": "ACC_002",
+      "company": "Apex Alarm Systems",
+      "v1_unknowns": 2,
+      "v2_unknowns": 2,
+      "total_changes": 7,
+      "critical_changes": 4
+    },
+    {
+      "account_id": "ACC_003",
+      "company": "PacWest Fire and Safety",
+      "v1_unknowns": 3,
+      "v2_unknowns": 3,
+      "total_changes": 6,
+      "critical_changes": 4
+    },
+    {
+      "account_id": "ACC_004",
+      "company": "Cornerstone HVAC Services",
+      "v1_unknowns": 3,
+      "v2_unknowns": 3,
+      "total_changes": 7,
+      "critical_changes": 4
+    },
+    {
+      "account_id": "ACC_005",
+      "company": "TrueGuard Electrical",
+      "v1_unknowns": 2,
+      "v2_unknowns": 2,
+      "total_changes": 7,
+      "critical_changes": 4
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "company_name": "Acme Fire Protection based in Columbus Ohio",
+  "business_hours": {
+    "days": "Monday Through Friday",
+    "start": "8 AM",
+    "end": "5 PM",
+    "timezone": "America/New_York"
+  },
+  "office_address": null,
+  "services_supported": [
+    "fire protection",
+    "sprinkler",
+    "fire alarm",
+    "suppression",
+    "inspection"
+  ],
+  "emergency_definition": [
+    "sprinkler leak",
+    "pipe burst",
+    "fire"
+  ],
+  "emergency_routing_rules": {
+    "primary_contact": null,
+    "primary_phone": "614-555-0187",
+    "secondary_contact": null,
+    "secondary_phone": "614-555-0199",
+    "fallback": null
+  },
+  "non_emergency_routing_rules": null,
+  "call_transfer_rules": {
+    "timeout_seconds": null,
+    "retries": null,
+    "on_fail_message": null
+  },
+  "integration_constraints": [
+    "Never create a sprinkler job in ServiceTrade automatically."
+  ],
+  "after_hours_flow_summary": null,
+  "office_hours_flow_summary": null,
+  "questions_or_unknowns": [],
+  "notes": "Extracted via rule-based fallback. Manual review recommended.",
+  "_extraction_method": "rule_based",
+  "account_id": "ACC_ACME_FIRE_PROTECTION",
+  "pipeline_source": "demo_call",
+  "created_at": "2026-03-03T17:00:50.827015+00:00",
+  "version": "v1"
+}

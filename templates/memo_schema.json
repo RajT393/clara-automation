@@ -1,0 +1,39 @@
+{
+  "$schema": "Clara Account Memo Schema v1",
+  "account_id": "string - auto-generated",
+  "company_name": "string or null",
+  "version": "v1 or v2",
+  "pipeline_source": "demo_call or onboarding",
+  "business_hours": {
+    "days": "e.g. Monday through Friday",
+    "start": "e.g. 8:00 AM",
+    "end": "e.g. 5:00 PM",
+    "timezone": "IANA timezone e.g. America/New_York"
+  },
+  "office_address": "string or null",
+  "services_supported": [
+    "list of service strings"
+  ],
+  "emergency_definition": [
+    "list of trigger conditions"
+  ],
+  "emergency_routing_rules": {
+    "primary_contact": "name",
+    "primary_phone": "phone number",
+    "secondary_phone": "phone number",
+    "fallback": "what to do if all transfers fail"
+  },
+  "non_emergency_routing_rules": "string description",
+  "call_transfer_rules": {
+    "timeout_seconds": 60,
+    "retries": 1,
+    "on_fail_message": "what agent says if transfer fails"
+  },
+  "integration_constraints": [
+    "list of system constraints"
+  ],
+  "questions_or_unknowns": [
+    "list of unresolved items"
+  ],
+  "notes": "string"
+}

@@ -1,0 +1,51 @@
+Onboarding Call Transcript - Shield Fire Protection - Account Setup
+
+[Recording starts]
+
+Onboarding Specialist (Clara Team): Hi, thanks for joining the onboarding call. Congratulations on getting started with Clara. I'm going to walk through the configuration details with you today so we can set up your agent correctly. Ready?
+
+Client (Shield Fire Protection): Yes, let's do it.
+
+Onboarding Specialist: Great. Let's confirm your business hours first.
+
+Client: We're open Monday through Friday, 8 AM to 5 PM Eastern Time.
+
+Onboarding Specialist: Perfect. And your office address?
+
+Client: 4820 Morse Road, Columbus, Ohio 43230.
+
+Onboarding Specialist: Got it. Now let's talk about emergency definitions. What should Clara treat as an emergency?
+
+Client: So the main ones are: active sprinkler discharge, fire alarm going off or triggered, smoke detected, any kind of suppression system activation, and a reported fire on site. Those are all immediate emergencies.
+
+Onboarding Specialist: And for after-hours emergencies, what's the routing order?
+
+Client: First try Mike Daniels, that's 614-555-0192. If he doesn't pick up within 30 seconds, try our main dispatch at 614-555-0100. If dispatch doesn't answer either, Clara should tell the caller we're getting someone out to them as fast as possible and ask them to call 911 if there's immediate danger.
+
+Onboarding Specialist: Okay, and transfer timeout — 30 seconds per attempt?
+
+Client: Yeah, 30 seconds is fine.
+
+Onboarding Specialist: What about non-emergency after-hours calls?
+
+Client: Those just get collected. Name, number, brief description. We'll call them back first thing in the morning. Clara should NOT try to transfer those, just collect and confirm follow-up.
+
+Onboarding Specialist: Makes sense. Any integration notes we should know about?
+
+Client: Yes, this is important. Do not create any sprinkler-related jobs in ServiceTrade automatically. We had a billing nightmare with duplicates. Any ServiceTrade job creation has to be done manually by our office team. Clara can collect the info but should never create the job.
+
+Onboarding Specialist: Noted. What about fire alarm inspection jobs?
+
+Client: Inspection jobs are fine to log, but still no auto-create in ServiceTrade. Same rule applies.
+
+Onboarding Specialist: Any special greetings or phrases you want Clara to use?
+
+Client: We want it to say "Thank you for calling Shield Fire Protection" not just "Shield Fire". And she should sound calm and professional, not robotic.
+
+Onboarding Specialist: Got it. One more thing — what should Clara do if a caller asks to speak to a specific person by name?
+
+Client: Ask for their name and number and let them know that person will call them back. Don't transfer to individuals directly, only to the on-call line for emergencies.
+
+Onboarding Specialist: Perfect. I think we have everything we need. Let me summarize what we captured...
+
+[Recap plays - recording ends]

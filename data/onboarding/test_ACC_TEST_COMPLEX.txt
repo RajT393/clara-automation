@@ -1,0 +1,11 @@
+
+Metro HVAC Services confirmed.
+Hours: Monday to Friday 7:00 AM to 5:00 PM Central Time.
+Emergency routing: Primary on-call 312-555-0155, Secondary 312-555-0166.
+Timeout: 30 seconds each.
+Refrigeration failure at food service: Tier 1 emergency, immediate page.
+HVAC loss in winter below 32F outside: Tier 1 emergency.
+Non-emergency after hours: message and next business day callback.
+No software integrations currently.
+Address: 1200 West Lake Street Chicago Illinois 60607.
+        

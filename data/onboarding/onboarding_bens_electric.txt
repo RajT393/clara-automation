@@ -1,0 +1,61 @@
+[Onboarding Call Transcript - Ben's Electric Solutions]
+Date: January 14, 2026
+Participants: Ben (client), Pavan (Clara onboarding specialist), Barat (sales)
+
+=== CONFIRMED CONFIGURATION DETAILS ===
+
+Company: Ben's Electric Solutions
+Owner: Ben
+Business type: Electrical contractor (residential and commercial)
+
+--- OFFICE HOURS ---
+Business hours: Monday to Friday
+Hours: 8:30 AM to 5:00 PM
+Timezone: Mountain Time (Calgary, Alberta, Canada - MST/MDT)
+Note: Website says 8 to 4:30, Ben confirmed closer to 8:30 to 5
+
+--- CALL HANDLING - OFFICE HOURS ---
+Current setup: Ben takes all incoming calls himself
+Target callers for Clara: new clients, small jobs, service calls, people without existing relationship
+Contractors in field have direct numbers - they are NOT routed through Clara
+Call forwarding setup: Android phone - forward if no answer OR if Ben declines call
+Future setup: Once second number active, Clara answers first, transfers to Ben's second number if needed
+Transfer capability: Yes, Clara can transfer to Ben if customer insists on speaking to person
+
+--- PRICING (mention ONLY if customer asks) ---
+Service call fee: $115 (call out fee to get to job site - not time, just showing up)
+Hourly rate: $98/hour residential, in half-hour increments
+First half hour after callout: $49
+Do NOT proactively mention pricing on every call
+
+--- AFTER HOURS ---
+General policy: NO emergency dispatch for general public after hours
+Exception customer: G&M Pressure Washing (property management company)
+Exception contact: Shelley Manley
+Exception phone: 403-870-8494
+Exception email: gm_pressurewash@yahoo.ca
+Exception reason: They manage ~20 gas stations (Chevron and Esso) around the city
+After hours behavior for G&M: If Shelley or anyone from G&M calls about gas station emergency, patch call through to Ben
+For ALL other after hours calls: Take message, call back next business day
+
+--- NOTIFICATIONS ---
+Email notifications: info@benselectricsolutionsteam.com
+SMS notifications: Ben's main business line (same number)
+Post-call workflow: Send email + SMS after every call with caller details
+
+--- INTEGRATIONS ---
+Website: benselectricsolutionsteam.com
+Agent trained on website content for business information
+No CRM or field management software integration required at this stage
+
+--- NEXT STEPS AGREED ON CALL ---
+Pavan to send: agent number for test calls + dashboard link
+Follow-up call: Friday at 2:00 PM to review test calls and walk through dashboard
+Go-live: After Friday review, forward main line to Clara
+
+=== CHAT LOG DETAILS (from meeting chat) ===
+Ben's notification email: info@benselectricsolutionsteam.com
+Emergency after-hours client: G&M Pressure Washing
+Emergency contact name: Shelley Manley
+Emergency contact phone: 403-870-8494
+Emergency contact email: gm_pressurewash@yahoo.ca

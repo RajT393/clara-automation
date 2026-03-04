@@ -1,0 +1,12 @@
+[Demo Call - Metro Sprinkler Co]
+Client: We are Metro Sprinkler Co in Chicago Illinois. We do wet and dry pipe sprinkler systems for commercial buildings.
+Sales Rep: What brings you to Clara?
+Client: Our answering service does not understand the industry. Someone calls about a sprinkler head popping and they treat it like a non-emergency. That is a flood situation.
+Sales Rep: How should that be classified?
+Client: Immediate emergency. Same with active water discharge, pipe burst, system pressure issues.
+Sales Rep: Business hours?
+Client: Monday to Friday, 7 to 4 Central time. But emergencies happen 24 by 7.
+Sales Rep: Emergency contact?
+Client: Main dispatch at 312-555-0155. Backup is 312-555-0166.
+Sales Rep: Any systems?
+Client: Not on ServiceTrade yet. Just spreadsheets.

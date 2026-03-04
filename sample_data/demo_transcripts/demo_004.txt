@@ -1,0 +1,29 @@
+Demo Call Transcript - Prospect: Cornerstone HVAC Services
+
+[Recording starts]
+
+Sales Rep: Hi, thanks for joining. Can you introduce your company?
+
+Prospect: Sure, we're Cornerstone HVAC. We're in Atlanta, Georgia. We service commercial and light industrial HVAC systems. Mostly maintenance contracts and emergency repairs.
+
+Sales Rep: How do you currently manage inbound calls?
+
+Prospect: We're a team of 8. Office hours are 8 AM to 5 PM Eastern, Monday through Friday. After hours we have an on-call tech, changes every week. Right now we're using a personal cell number which is not sustainable.
+
+Sales Rep: What constitutes an emergency for your clients?
+
+Prospect: Complete HVAC system failure in summer, that's a big one. Or if a server room cooling unit goes down, that's critical infrastructure. Those need immediate response.
+
+Sales Rep: And who gets the emergency calls?
+
+Prospect: The on-call tech. But we also want our operations manager, Sandra, notified for any emergency call even if the tech handles it.
+
+Sales Rep: Any software we should know about?
+
+Prospect: We use ServiceTrade for field service management.
+
+Sales Rep: What's your biggest pain point right now?
+
+Prospect: Emergency calls going to voicemail. We've lost clients over it. And scheduling calls during business hours going to the wrong person.
+
+[Recording ends]

@@ -1,0 +1,66 @@
+{
+  "account_id": "ACC_005",
+  "company_name": "TrueGuard Electrical",
+  "business_hours": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "start": "7:00 AM",
+    "end": "3:30 PM",
+    "timezone": "Mountain Time"
+  },
+  "office_address": null,
+  "services_supported": [
+    "Maintenance Contracts",
+    "Electrical Services",
+    "Panel Services"
+  ],
+  "emergency_definition": [
+    "Panel failure",
+    "Power outage at facility",
+    "Electrical fire or spark",
+    "Live wire exposure",
+    "Generator failure",
+    "Burning smell from electrical panel"
+  ],
+  "emergency_routing_rules": {
+    "primary_contact": "480-555-0234",
+    "contact_order": [
+      "480-555-0234",
+      "480-555-0311"
+    ],
+    "fallback": "Inform caller our team has been paged and will contact them within 10 minutes."
+  },
+  "non_emergency_routing_rules": "Collect name, phone number, and description. Confirm follow-up during next business hours. Do not attempt transfer.",
+  "call_transfer_rules": {
+    "timeout_seconds": 25,
+    "retries": 1,
+    "message_if_fails": null
+  },
+  "integration_constraints": [
+    "Do not provide pricing quotes to callers",
+    "Do not provide arrival time estimates unless specifically authorized",
+    "Servicetrade integration in use \u2014 see constraints above",
+    "Servicetitan integration in use \u2014 see constraints above"
+  ],
+  "after_hours_flow_summary": "Greet caller. Identify if emergency or non-emergency. If emergency: collect name, number, address, then attempt transfer per routing rules. If transfer fails: inform caller team has been paged. If non-emergency: collect details and confirm next-business-day callback.",
+  "office_hours_flow_summary": "Greet caller professionally. Understand purpose. Collect name and callback number. Route to appropriate team member or log for follow-up.",
+  "questions_or_unknowns": [
+    "Transfer timeout duration not specified",
+    "Office address not confirmed (expected \u2014 demo call)"
+  ],
+  "notes": "End emergency calls with: 'Help is on the way'; Phoenix AZ: no daylight saving \u2014 stays on Mountain Standard Time year-round",
+  "_extraction_method": "rule_based_enhanced",
+  "source_file": "onboarding_005.txt",
+  "call_type": "onboarding",
+  "extracted_at": "2026-03-03T11:25:29.461525Z",
+  "version": "v2",
+  "version_history": {
+    "v1_generated_at": "2026-03-03T11:25:29.397720Z",
+    "v2_generated_at": "2026-03-03T11:25:29.461533Z"
+  }
+}

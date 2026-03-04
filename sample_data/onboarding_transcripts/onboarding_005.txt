@@ -1,0 +1,33 @@
+Onboarding Call Transcript - TrueGuard Electrical
+
+[Recording starts]
+
+Onboarding Specialist: Let's finalize your setup. Business hours?
+
+Client: Monday through Friday, 7 AM to 3:30 PM Mountain Time. We're in Phoenix so no daylight saving adjustment — we stay on Mountain Standard Time year-round.
+
+Onboarding Specialist: Office address?
+
+Client: 2240 West Camelback Road, Phoenix, Arizona 85015.
+
+Onboarding Specialist: Emergency definitions?
+
+Client: Power outage at commercial facility, electrical fire or burning smell from panel, panel failure or breaker that won't reset, any live wire exposure, and generator failure for clients on maintenance contracts.
+
+Onboarding Specialist: Emergency routing?
+
+Client: Always goes to our main emergency line: 480-555-0234. That's monitored 24/7 by whoever is on call. If it doesn't answer in 25 seconds, try our backup: 480-555-0311. If both fail, log the caller's info and tell them we're paging our on-call team and they'll get a call within 10 minutes.
+
+Onboarding Specialist: Integration notes?
+
+Client: We're not on ServiceTrade or ServiceTitan yet. Just use our internal log. Clara just needs to capture the info cleanly. One thing: never give callers a time estimate for arrival unless it's the 10-minute callback commitment I just mentioned.
+
+Onboarding Specialist: Non-emergency after hours?
+
+Client: Standard collection. Name, number, description. Morning callback. If they push for same day, tell them we'll prioritize based on urgency and someone will assess when they call back.
+
+Onboarding Specialist: Any special phrases?
+
+Client: Yes — Clara should always end emergency calls with "Help is on the way" after confirming the transfer or callback commitment. It reassures the customer.
+
+[Recording ends]

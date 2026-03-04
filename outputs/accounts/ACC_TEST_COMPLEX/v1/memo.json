@@ -1,0 +1,48 @@
+{
+  "company_name": "Metro HVAC Services",
+  "business_hours": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "start": "7:00",
+    "end": "17:00",
+    "timezone": "Central"
+  },
+  "office_address": null,
+  "services_supported": [
+    "Commercial HVAC",
+    "Refrigeration systems",
+    "Industrial cooling"
+  ],
+  "emergency_definition": [
+    "Refrigeration failures at food facilities",
+    "Complete HVAC loss in winter"
+  ],
+  "emergency_routing_rules": {
+    "primary_contact": null,
+    "primary_phone": null,
+    "secondary_contact": null,
+    "secondary_phone": null,
+    "fallback": null
+  },
+  "non_emergency_routing_rules": null,
+  "call_transfer_rules": {
+    "timeout_seconds": null,
+    "retries": null,
+    "on_fail_message": null
+  },
+  "integration_constraints": [],
+  "after_hours_flow_summary": null,
+  "office_hours_flow_summary": null,
+  "questions_or_unknowns": [],
+  "notes": null,
+  "_extraction_method": "ollama",
+  "account_id": "ACC_TEST_COMPLEX",
+  "pipeline_source": "demo_call",
+  "created_at": "2026-03-03T18:01:31.835598+00:00",
+  "version": "v1"
+}
