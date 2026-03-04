@@ -8,12 +8,130 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "webhook-pipeline-a",
+      "id": "node-webhook-a",
       "name": "Webhook: Pipeline A",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [240, 300],
-      "notes": "Trigger Pipeline A with: {\"transcript\": \"<text>\", \"account_id\": \"optional\"}"
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:11434/api/generate",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"model\": \"llama3:latest\",\n  \"prompt\": {{ JSON.stringify(\"You are a structured data extractor for Clara Answers.\\nExtract operational configuration from the transcript below.\\nSTRICT RULES:\\n- Only extract EXPLICITLY stated info\\n- Never invent or assume values\\n- If field not mentioned set to null\\n- Unclear items go into questions_or_unknowns\\n- Return ONLY valid JSON, no markdown, no explanation\\n\\nReturn this exact schema:\\n{\\n  \\\"company_name\\\": null,\\n  \\\"business_hours\\\": {\\n    \\\"days\\\": null,\\n    \\\"start\\\": null,\\n    \\\"end\\\": null,\\n    \\\"timezone\\\": null\\n  },\\n  \\\"office_address\\\": null,\\n  \\\"services_supported\\\": [],\\n  \\\"emergency_definition\\\": [],\\n  \\\"emergency_routing_rules\\\": {\\n    \\\"primary_contact\\\": null,\\n    \\\"primary_phone\\\": null,\\n    \\\"secondary_contact\\\": null,\\n    \\\"secondary_phone\\\": null,\\n    \\\"fallback\\\": null\\n  },\\n  \\\"non_emergency_routing_rules\\\": null,\\n  \\\"call_transfer_rules\\\": {\\n    \\\"timeout_seconds\\\": null,\\n    \\\"retries\\\": null,\\n    \\\"on_fail_message\\\": null\\n  },\\n  \\\"integration_constraints\\\": [],\\n  \\\"after_hours_flow_summary\\\": null,\\n  \\\"office_hours_flow_summary\\\": null,\\n  \\\"questions_or_unknowns\\\": [],\\n  \\\"notes\\\": null\\n}\\n\\nTRANSCRIPT:\\n\") + $json.body.transcript }}\",\n  \"stream\": false,\n  \"options\": { \"temperature\": 0.1 }\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "node-ollama",
+      "name": "Ollama: Extract Memo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [420, 300],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "cond-ollama-done",
+              "leftValue": "={{ $json.done }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-check-ollama",
+      "name": "Ollama Succeeded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_GROQ_API_KEY_HERE"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"model\": \"llama3-8b-8192\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"You are a structured data extractor for Clara Answers. Extract operational configuration from the transcript. Return ONLY valid JSON with these fields: company_name, business_hours (days/start/end/timezone), office_address, services_supported (array), emergency_definition (array), emergency_routing_rules (primary_contact/primary_phone/secondary_contact/secondary_phone/fallback), non_emergency_routing_rules, call_transfer_rules (timeout_seconds/retries/on_fail_message), integration_constraints (array), after_hours_flow_summary, office_hours_flow_summary, questions_or_unknowns (array), notes. Only extract explicitly stated info. Set missing fields to null. TRANSCRIPT: {{ $('Webhook: Pipeline A').item.json.body.transcript }}\"\n    }\n  ],\n  \"temperature\": 0.1,\n  \"max_tokens\": 1000\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "node-groq",
+      "name": "Groq: Fallback Extract",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [860, 420],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build Account Memo from Ollama or Groq response\nconst webhookData = $('Webhook: Pipeline A').item.json.body;\nconst transcript = webhookData.transcript || '';\nconst accountId = webhookData.account_id || 'ACC_' + Date.now().toString(36).toUpperCase();\n\n// Get raw LLM response\nlet raw = '';\ntry {\n  // Try Ollama response format\n  raw = $input.item.json.response || '';\n} catch(e) {}\n\nif (!raw) {\n  try {\n    // Try Groq response format\n    raw = $input.item.json.choices[0].message.content || '';\n  } catch(e) {}\n}\n\n// Parse JSON from LLM response\nlet memo = {};\ntry {\n  const cleaned = raw.replace(/```json/g, '').replace(/```/g, '').trim();\n  // Find JSON object in response\n  const jsonMatch = cleaned.match(/\\{[\\s\\S]*\\}/);\n  if (jsonMatch) {\n    memo = JSON.parse(jsonMatch[0]);\n  }\n} catch(e) {\n  // Rule-based fallback extraction\n  const t = transcript.toLowerCase();\n  \n  // Extract company name\n  let company = null;\n  const nameMatch = transcript.match(/(?:we are|this is|i'm from|company(?:\\s+is)?)\\s+([A-Z][A-Za-z\\s&]+(?:LLC|Inc|Corp|Co\\.?|Services|Protection|Fire|Systems|Alarm|Electric|HVAC)?)/);\n  if (nameMatch) company = nameMatch[1].trim();\n  \n  // Extract timezone\n  let timezone = null;\n  if (t.includes('eastern') || t.includes('est')) timezone = 'America/New_York';\n  else if (t.includes('central') || t.includes('cst')) timezone = 'America/Chicago';\n  else if (t.includes('mountain') || t.includes('mst')) timezone = 'America/Denver';\n  else if (t.includes('pacific') || t.includes('pst')) timezone = 'America/Los_Angeles';\n  \n  // Extract hours\n  const hoursMatch = t.match(/(\\d{1,2}(?::\\d{2})?\\s*(?:am|pm))\\s*(?:to|-)\\s*(\\d{1,2}(?::\\d{2})?\\s*(?:am|pm))/);\n  const daysMatch = t.match(/(monday|mon)\\s*(?:to|through|-)\\s*(friday|fri|saturday|sat|sunday|sun)/);\n  \n  // Extract phones\n  const phones = transcript.match(/\\b(?:\\+1[-.\\s]?)?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}\\b/g) || [];\n  \n  // Extract unknowns\n  const unknowns = [];\n  if (!company) unknowns.push('Company name not clearly stated');\n  if (!timezone) unknowns.push('Timezone not confirmed');\n  if (!phones.length) unknowns.push('Emergency contact phone number missing');\n  if (!hoursMatch) unknowns.push('Business hours not confirmed');\n  \n  memo = {\n    company_name: company,\n    business_hours: {\n      days: daysMatch ? daysMatch[0] : null,\n      start: hoursMatch ? hoursMatch[1].toUpperCase() : null,\n      end: hoursMatch ? hoursMatch[2].toUpperCase() : null,\n      timezone: timezone\n    },\n    office_address: null,\n    services_supported: ['fire protection','sprinkler','electrical','hvac','alarm'].filter(s => t.includes(s)),\n    emergency_definition: ['sprinkler leak','pipe burst','fire alarm','smoke','flood','power outage','live wire'].filter(e => t.includes(e)),\n    emergency_routing_rules: {\n      primary_contact: null,\n      primary_phone: phones[0] || null,\n      secondary_contact: null,\n      secondary_phone: phones[1] || null,\n      fallback: null\n    },\n    non_emergency_routing_rules: null,\n    call_transfer_rules: { timeout_seconds: null, retries: null, on_fail_message: null },\n    integration_constraints: t.includes('servicetrade') ? ['ServiceTrade integration noted'] : [],\n    after_hours_flow_summary: null,\n    office_hours_flow_summary: null,\n    questions_or_unknowns: unknowns,\n    notes: 'Extracted via rule-based fallback - LLM unavailable'\n  };\n}\n\n// Add metadata\nmemo.account_id = accountId;\nmemo.version = 'v1';\nmemo.pipeline_source = 'demo_call';\nmemo.created_at = new Date().toISOString();\nmemo._extraction_method = raw ? 'llm' : 'rule_based';\n\nreturn { json: { memo, account_id: accountId, transcript } };"
+      },
+      "id": "node-build-memo",
+      "name": "Build Account Memo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1080, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate Retell Agent Spec from memo\nconst { memo, account_id } = $input.item.json;\n\nconst bh = memo.business_hours || {};\nconst routing = memo.emergency_routing_rules || {};\nconst transfer = memo.call_transfer_rules || {};\nconst company = memo.company_name || 'the company';\nconst days = bh.days || 'Monday to Friday';\nconst start = bh.start || '8:00 AM';\nconst end = bh.end || '5:00 PM';\nconst tz = bh.timezone || 'Eastern Time';\nconst primaryPhone = routing.primary_phone || '[EMERGENCY_PHONE_REQUIRED]';\nconst timeout = transfer.timeout_seconds || 60;\nconst onFail = transfer.on_fail_message || \"I was unable to reach our team. Your information has been recorded and someone will call you back shortly.\";\nconst emergency = (memo.emergency_definition || []).join(', ') || 'active emergencies';\nconst services = (memo.services_supported || []).join(', ') || 'our services';\nconst constraints = (memo.integration_constraints || []).map(c => '- ' + c).join('\\n') || '- Follow standard procedures';\n\nconst systemPrompt = `# Clara Answers - AI Voice Agent\n## Company: ${company}\n## Version: v1\n\nYou are Clara, a professional AI receptionist for ${company}.\nServices: ${services}\nBusiness hours: ${days}, ${start} to ${end} ${tz}\n\n---\n\n## BUSINESS HOURS FLOW\n\n1. GREETING\n   \"Thank you for calling ${company}. This is Clara. How can I help you today?\"\n\n2. UNDERSTAND PURPOSE\n   Listen fully before responding. Do NOT interrupt.\n\n3. COLLECT NAME AND CALLBACK NUMBER\n   \"May I have your name please?\"\n   \"And the best callback number for you?\"\n   Confirm: \"Just to confirm, that's [repeat number] - correct?\"\n\n4. ROUTE OR TRANSFER\n   If emergency (${emergency}):\n     Initiate transfer to ${primaryPhone}\n     Say: \"This sounds urgent. Let me connect you right away. Please hold.\"\n   If non-emergency:\n     Say: \"I'll make sure the right person follows up with you.\"\n\n5. IF TRANSFER FAILS (after ${timeout} seconds)\n   Say: \"${onFail}\"\n   Log call details immediately.\n\n6. CONFIRM NEXT STEPS\n   \"You can expect a callback shortly. Is there anything else I can help with?\"\n\n7. CLOSE\n   \"Thank you for calling ${company}. Have a great day!\"\n\n---\n\n## AFTER HOURS FLOW\n\n1. GREETING\n   \"Thank you for calling ${company}. You've reached us outside business hours.\"\n   \"Our hours are ${days}, ${start} to ${end} ${tz}.\"\n   \"I'm Clara, your after-hours assistant. How can I help?\"\n\n2. CONFIRM EMERGENCY STATUS\n   \"Is this an emergency situation?\"\n   Emergencies include: ${emergency}\n\n3A. IF EMERGENCY\n   Collect: Full name, callback number, service address\n   Transfer to: ${primaryPhone}\n   If transfer fails: \"${onFail}\"\n\n3B. IF NON-EMERGENCY\n   Collect name and callback number\n   \"Our team will follow up during business hours: ${days} ${start}-${end} ${tz}.\"\n\n4. CLOSE\n   \"Thank you for calling ${company}. We'll be in touch soon.\"\n\n---\n\n## RULES\n- NEVER mention function calls, tools, or API to caller\n- NEVER invent information\n- NEVER ask for same info twice\n- Always confirm collected information back to caller\n- Stay calm during emergencies\n\n## CONSTRAINTS\n${constraints}`;\n\nconst agentSpec = {\n  agent_name: `Clara - ${company} (v1)`,\n  account_id,\n  version: 'v1',\n  created_at: new Date().toISOString(),\n  voice_style: {\n    provider: 'elevenlabs',\n    voice_id: 'rachel',\n    style: 'professional',\n    speed: 1.0\n  },\n  system_prompt: systemPrompt,\n  key_variables: {\n    company_name: company,\n    timezone: bh.timezone || '[REQUIRED]',\n    business_hours_days: days,\n    business_hours_start: start,\n    business_hours_end: end,\n    emergency_primary_phone: primaryPhone,\n    transfer_timeout_seconds: timeout\n  },\n  tool_invocation_placeholders: {\n    transfer_call: { trigger: 'Emergency or customer requests person', note: 'NEVER mention to caller' },\n    end_call: { trigger: 'Farewell complete', note: 'NEVER mention to caller' },\n    log_call: { trigger: 'End of every call', note: 'NEVER mention to caller' }\n  },\n  call_transfer_protocol: {\n    method: 'warm_transfer',\n    timeout_seconds: timeout,\n    announce_caller: true\n  },\n  fallback_protocol: {\n    on_transfer_fail: onFail,\n    emergency_fallback: routing.fallback || 'Notify on-call team and assure callback'\n  },\n  retell_config: {\n    begin_message: `Thank you for calling ${company}. This is Clara. How can I help you today?`,\n    language: 'en-US',\n    max_call_duration_seconds: 600,\n    enable_backchannel: true\n  }\n};\n\nreturn { json: { memo, agent_spec: agentSpec, account_id } };"
+      },
+      "id": "node-gen-spec",
+      "name": "Generate Agent Spec",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1300, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Save outputs to filesystem\nconst fs = require('fs');\nconst path = require('path');\n\nconst { memo, agent_spec, account_id } = $input.item.json;\n\n// Output directory inside mounted volume\nconst outputDir = path.join('/home/user/clara-automation/outputs/accounts', account_id, 'v1');\nfs.mkdirSync(outputDir, { recursive: true });\n\nfs.writeFileSync(path.join(outputDir, 'memo.json'), JSON.stringify(memo, null, 2));\nfs.writeFileSync(path.join(outputDir, 'agent_spec.json'), JSON.stringify(agent_spec, null, 2));\n\n// Task tracker entry\nconst taskDir = path.join('/home/user/clara-automation/outputs/task_log');\nfs.mkdirSync(taskDir, { recursive: true });\nconst task = {\n  task_id: `TASK_${account_id}_v1_${Date.now()}`,\n  account_id,\n  company_name: memo.company_name || 'Unknown',\n  version: 'v1',\n  status: 'pending_review',\n  created_at: new Date().toISOString(),\n  open_questions: memo.questions_or_unknowns || [],\n  notes: 'Auto-generated by n8n Pipeline A. Review before deploying to Retell.'\n};\nfs.writeFileSync(path.join(taskDir, `${task.task_id}.json`), JSON.stringify(task, null, 2));\n\nreturn { json: {\n  status: 'success',\n  account_id,\n  memo_path: path.join(outputDir, 'memo.json'),\n  spec_path: path.join(outputDir, 'agent_spec.json'),\n  task_id: task.task_id,\n  open_questions: memo.questions_or_unknowns || []\n}};"
+      },
+      "id": "node-save",
+      "name": "Save to Outputs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1520, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}"
+      },
+      "id": "node-respond-a",
+      "name": "Respond Pipeline A",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1740, 300]
     },
     {
       "parameters": {
@@ -22,146 +140,70 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "webhook-pipeline-b",
+      "id": "node-webhook-b",
       "name": "Webhook: Pipeline B",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [240, 500],
-      "notes": "Trigger Pipeline B with: {\"transcript\": \"<text>\", \"account_id\": \"ACC_XXX\"}"
+      "position": [200, 560]
     },
     {
       "parameters": {
-        "url": "={{ $env.OLLAMA_URL }}/api/generate",
-        "sendBody": true,
-        "bodyContentType": "json",
-        "jsonBody": "={\n  \"model\": \"{{ $env.OLLAMA_MODEL }}\",\n  \"prompt\": \"{{ $json.extraction_prompt }}\",\n  \"stream\": false,\n  \"options\": { \"temperature\": 0.1 }\n}",
-        "options": { "timeout": 120000 }
+        "jsCode": "// Pipeline B: Load v1, extract onboarding data, merge to v2\nconst fs = require('fs');\nconst path = require('path');\n\nconst body = $input.item.json.body;\nconst accountId = body.account_id;\nconst transcript = body.transcript || '';\n\nif (!accountId) {\n  return { json: { status: 'error', reason: 'account_id required' } };\n}\n\n// Load v1 memo\nconst v1Path = path.join('/home/user/clara-automation/outputs/accounts', accountId, 'v1', 'memo.json');\nif (!fs.existsSync(v1Path)) {\n  return { json: { status: 'error', reason: 'v1_not_found - run pipeline-a first', account_id: accountId } };\n}\n\nconst v1 = JSON.parse(fs.readFileSync(v1Path, 'utf8'));\n\n// Rule-based extraction from onboarding transcript\nconst t = transcript.toLowerCase();\n\n// Extract updated fields\nlet timezone = null;\nif (t.includes('eastern') || t.includes('est') || t.includes('edt')) timezone = 'America/New_York';\nelse if (t.includes('central') || t.includes('cst') || t.includes('cdt')) timezone = 'America/Chicago';\nelse if (t.includes('mountain') || t.includes('mst') || t.includes('mdt')) timezone = 'America/Denver';\nelse if (t.includes('pacific') || t.includes('pst') || t.includes('pdt')) timezone = 'America/Los_Angeles';\n\nconst hoursMatch = t.match(/(\\d{1,2}(?::\\d{2})?\\s*(?:am|pm))\\s*(?:to|-)\\s*(\\d{1,2}(?::\\d{2})?\\s*(?:am|pm))/);\nconst daysMatch = t.match(/(monday|mon)\\s*(?:to|through|-)\\s*(friday|fri|saturday|sat|sunday|sun)/);\nconst phones = transcript.match(/\\b(?:\\+1[-.\\s]?)?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}\\b/g) || [];\nconst timeoutMatch = t.match(/(\\d+)\\s*seconds?/);\n\n// Smart merge - only override with confirmed non-null values\nconst v2 = JSON.parse(JSON.stringify(v1)); // deep clone\n\nif (timezone) v2.business_hours.timezone = timezone;\nif (hoursMatch) {\n  v2.business_hours.start = hoursMatch[1].toUpperCase();\n  v2.business_hours.end = hoursMatch[2].toUpperCase();\n}\nif (daysMatch) v2.business_hours.days = daysMatch[0];\nif (phones.length > 0) v2.emergency_routing_rules.primary_phone = phones[0];\nif (phones.length > 1) v2.emergency_routing_rules.secondary_phone = phones[1];\nif (timeoutMatch) v2.call_transfer_rules.timeout_seconds = parseInt(timeoutMatch[1]);\n\n// Extract emergency triggers from onboarding\nconst emergencyKeywords = ['sprinkler leak','pipe burst','fire alarm','smoke','flood','water leak',\n  'power outage','live wire','system failure','no heat','no ac','refrigeration failure'];\nconst foundEmergencies = emergencyKeywords.filter(e => t.includes(e));\nif (foundEmergencies.length > 0) v2.emergency_definition = foundEmergencies;\n\n// Extract constraints\nif (t.includes('never create') || t.includes('do not create')) {\n  const constraintMatch = transcript.match(/(?:never|do not) create[^.]+\\./i);\n  if (constraintMatch && !v2.integration_constraints.includes(constraintMatch[0])) {\n    v2.integration_constraints.push(constraintMatch[0].trim());\n  }\n}\n\n// Extract company name if missing\nif (!v2.company_name) {\n  const nameMatch = transcript.match(/(?:company:|confirmed:|we are)\\s*([A-Z][A-Za-z\\s&]+(?:LLC|Inc|Corp|Co\\.?)?)/);\n  if (nameMatch) v2.company_name = nameMatch[1].trim();\n}\n\n// Compute diff\nconst changes = [];\nfunction diff(o, n, p) {\n  p = p || '';\n  const keys = new Set([...Object.keys(o || {}), ...Object.keys(n || {})]);\n  for (const k of keys) {\n    const skip = ['_extraction_method','created_at','updated_at','version','pipeline_source','account_id'];\n    if (skip.includes(k)) continue;\n    const fp = p ? p + '.' + k : k;\n    if (typeof o[k] === 'object' && typeof n[k] === 'object' && o[k] && n[k] && !Array.isArray(o[k])) {\n      diff(o[k], n[k], fp);\n    } else if (JSON.stringify(o[k]) !== JSON.stringify(n[k])) {\n      changes.push({ field: fp, change_type: !o[k] ? 'added' : !n[k] ? 'removed' : 'modified', old_value: o[k], new_value: n[k] });\n    }\n  }\n}\ndiff(v1, v2);\n\nv2.version = 'v2';\nv2.updated_at = new Date().toISOString();\nv2.pipeline_source = 'onboarding_call';\n\n// Save v2\nconst v2Dir = path.join('/home/user/clara-automation/outputs/accounts', accountId, 'v2');\nfs.mkdirSync(v2Dir, { recursive: true });\nfs.writeFileSync(path.join(v2Dir, 'memo.json'), JSON.stringify(v2, null, 2));\n\n// Generate changelog\nconst changelogLines = [\n  `# Changelog: ${accountId}`,\n  `## v1 → v2`,\n  `Generated: ${new Date().toISOString()}`,\n  `Total changes: ${changes.length}`,\n  '',\n  '## Changes',\n  ''\n];\nfor (const c of changes) {\n  changelogLines.push(`### \\`${c.field}\\` [${c.change_type}]`);\n  if (c.old_value !== null && c.old_value !== undefined) changelogLines.push(`- Before: \\`${JSON.stringify(c.old_value)}\\``);\n  if (c.new_value !== null && c.new_value !== undefined) changelogLines.push(`- After: \\`${JSON.stringify(c.new_value)}\\``);\n  changelogLines.push('');\n}\n\nfs.writeFileSync(path.join(v2Dir, 'changes.md'), changelogLines.join('\\n'));\nfs.writeFileSync(path.join(v2Dir, 'changes.json'), JSON.stringify({ account_id: accountId, changes, generated_at: new Date().toISOString() }, null, 2));\n\nreturn { json: { status: 'success', account_id: accountId, change_count: changes.length, changes } };"
       },
-      "id": "ollama-extract",
-      "name": "Ollama: Extract Memo",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 3,
-      "position": [480, 300],
-      "notes": "Calls local Ollama for LLM extraction"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "string": [
-            {
-              "value1": "={{ $json.statusCode }}",
-              "operation": "notEqual",
-              "value2": "200"
-            }
-          ]
-        }
-      },
-      "id": "check-ollama",
-      "name": "Ollama Succeeded?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [700, 300]
-    },
-    {
-      "parameters": {
-        "url": "https://api.groq.com/openai/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendBody": true,
-        "bodyContentType": "json",
-        "jsonBody": "={\n  \"model\": \"llama3-8b-8192\",\n  \"messages\": [{\"role\": \"user\", \"content\": \"{{ $json.extraction_prompt }}\"}],\n  \"temperature\": 0.1\n}",
-        "options": {}
-      },
-      "id": "groq-fallback",
-      "name": "Groq: Fallback Extract",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 3,
-      "position": [920, 400],
-      "notes": "Free Groq API fallback if Ollama unavailable"
-    },
-    {
-      "parameters": {
-        "jsCode": "// Parse LLM response and build account memo\nconst raw = items[0].json.response || \n            items[0].json.choices?.[0]?.message?.content || '';\n\nlet memo = {};\ntry {\n  const cleaned = raw.replace(/```json|```/g, '').trim();\n  memo = JSON.parse(cleaned);\n} catch(e) {\n  // Rule-based fallback for critical fields\n  memo = {\n    company_name: null,\n    business_hours: { days: null, start: null, end: null, timezone: null },\n    emergency_definition: [],\n    emergency_routing_rules: { primary_phone: null, fallback: null },\n    questions_or_unknowns: ['LLM parsing failed - manual review required'],\n    notes: 'Fallback extraction'\n  };\n}\n\n// Add metadata\nconst accountId = $input.first().json.account_id || \n  'ACC_' + Date.now().toString(36).toUpperCase();\n\nmemo.account_id = accountId;\nmemo.version = 'v1';\nmemo.created_at = new Date().toISOString();\nmemo.pipeline_source = 'demo_call';\n\nreturn [{ json: { memo, account_id: accountId } }];"
-      },
-      "id": "build-memo",
-      "name": "Build Account Memo",
+      "id": "node-merge-b",
+      "name": "Merge Onboarding → v2",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1140, 300]
-    },
-    {
-      "parameters": {
-        "jsCode": "// Generate Retell Agent Spec from memo\nconst memo = items[0].json.memo;\nconst accountId = items[0].json.account_id;\n\nconst bh = memo.business_hours || {};\nconst routing = memo.emergency_routing_rules || {};\nconst transfer = memo.call_transfer_rules || {};\nconst company = memo.company_name || 'the company';\n\nconst agentSpec = {\n  agent_name: `Clara - ${company} (v1)`,\n  account_id: accountId,\n  version: 'v1',\n  created_at: new Date().toISOString(),\n  voice_style: {\n    provider: 'elevenlabs',\n    voice_id: 'rachel',\n    style: 'professional'\n  },\n  key_variables: {\n    timezone: bh.timezone || '[TIMEZONE_REQUIRED]',\n    business_hours_days: bh.days || '[DAYS_REQUIRED]',\n    business_hours_start: bh.start || '[START_REQUIRED]',\n    business_hours_end: bh.end || '[END_REQUIRED]',\n    emergency_primary_phone: routing.primary_phone || '[PHONE_REQUIRED]',\n    company_name: company\n  },\n  call_transfer_protocol: {\n    timeout_seconds: transfer.timeout_seconds || 60,\n    method: 'warm_transfer',\n    on_fail: transfer.on_fail_message || 'I was unable to reach our team. Someone will call you back shortly.'\n  },\n  retell_config_notes: {\n    begin_message: `Thank you for calling ${company}. This is Clara. How can I help you today?`,\n    language: 'en-US',\n    max_call_duration_seconds: 600\n  }\n};\n\nreturn [{ json: { memo, agent_spec: agentSpec, account_id: accountId } }];"
-      },
-      "id": "generate-spec",
-      "name": "Generate Agent Spec",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [1360, 300]
-    },
-    {
-      "parameters": {
-        "jsCode": "// Write memo and spec to outputs directory\nconst fs = require('fs');\nconst path = require('path');\n\nconst { memo, agent_spec, account_id } = items[0].json;\n\nconst outputDir = path.join('/home/user/clara-automation/outputs/accounts', account_id, 'v1');\nfs.mkdirSync(outputDir, { recursive: true });\n\nfs.writeFileSync(path.join(outputDir, 'memo.json'), JSON.stringify(memo, null, 2));\nfs.writeFileSync(path.join(outputDir, 'agent_spec.json'), JSON.stringify(agent_spec, null, 2));\n\nreturn [{ json: { \n  status: 'saved',\n  account_id,\n  memo_path: path.join(outputDir, 'memo.json'),\n  spec_path: path.join(outputDir, 'agent_spec.json')\n}}];"
-      },
-      "id": "save-outputs",
-      "name": "Save to Outputs",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [1580, 300]
+      "position": [500, 560]
     },
     {
       "parameters": {
         "respondWith": "json",
         "responseBody": "={{ JSON.stringify($json) }}"
       },
-      "id": "respond-a",
-      "name": "Respond Pipeline A",
+      "id": "node-respond-b",
+      "name": "Respond Pipeline B",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1800, 300]
-    },
-    {
-      "parameters": {
-        "jsCode": "// Pipeline B: Merge onboarding into v1 and produce v2\nconst fs = require('fs');\nconst path = require('path');\n\nconst { account_id, onboarding_data } = items[0].json;\n\n// Load v1\nconst v1Path = path.join('/home/user/clara-automation/outputs/accounts', account_id, 'v1', 'memo.json');\nif (!fs.existsSync(v1Path)) {\n  return [{ json: { status: 'error', reason: 'v1_not_found', account_id } }];\n}\n\nconst v1 = JSON.parse(fs.readFileSync(v1Path, 'utf8'));\nconst v2 = JSON.parse(JSON.stringify(v1)); // deep clone\n\n// Smart merge: only override non-null values\nfunction smartMerge(target, source) {\n  for (const [k, v] of Object.entries(source)) {\n    if (['_extraction_method','created_at','version','pipeline_source','account_id'].includes(k)) continue;\n    if (v === null || v === undefined) continue;\n    if (Array.isArray(v) && v.length === 0) continue;\n    if (typeof v === 'object' && !Array.isArray(v) && typeof target[k] === 'object') {\n      smartMerge(target[k], v);\n    } else {\n      target[k] = v;\n    }\n  }\n}\n\nsmartMerge(v2, onboarding_data);\nv2.version = 'v2';\nv2.updated_at = new Date().toISOString();\n\n// Compute diff\nconst changes = [];\nfunction diff(o, n, p='') {\n  const keys = new Set([...Object.keys(o), ...Object.keys(n)]);\n  for (const k of keys) {\n    const fp = p ? `${p}.${k}` : k;\n    if (['_extraction_method','created_at','version','updated_at'].includes(k)) continue;\n    if (JSON.stringify(o[k]) !== JSON.stringify(n[k])) {\n      if (typeof o[k] === 'object' && typeof n[k] === 'object' && o[k] && n[k]) {\n        diff(o[k], n[k], fp);\n      } else {\n        changes.push({ field: fp, old_value: o[k], new_value: n[k] });\n      }\n    }\n  }\n}\ndiff(v1, v2);\n\nreturn [{ json: { v1, v2, changes, account_id } }];"
-      },
-      "id": "merge-onboarding",
-      "name": "Merge Onboarding -> v2",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [480, 500]
-    },
-    {
-      "parameters": {
-        "jsCode": "// Save v2 and generate changelog\nconst fs = require('fs');\nconst path = require('path');\n\nconst { v2, changes, account_id } = items[0].json;\n\nconst v2Dir = path.join('/home/user/clara-automation/outputs/accounts', account_id, 'v2');\nfs.mkdirSync(v2Dir, { recursive: true });\n\nfs.writeFileSync(path.join(v2Dir, 'memo.json'), JSON.stringify(v2, null, 2));\n\n// Generate changelog markdown\nconst lines = [\n  `# Changelog: ${account_id}`,\n  `## v1 → v2`,\n  `Generated: ${new Date().toISOString()}`,\n  `Total changes: ${changes.length}`,\n  '',\n  '## Changes',\n  ''\n];\nfor (const c of changes) {\n  lines.push(`### \\`${c.field}\\``);\n  lines.push(`- Before: \\`${c.old_value}\\``);\n  lines.push(`- After: \\`${c.new_value}\\``);\n  lines.push('');\n}\n\nfs.writeFileSync(path.join(v2Dir, 'changes.md'), lines.join('\\n'));\nfs.writeFileSync(path.join(v2Dir, 'changes.json'), JSON.stringify({ account_id, changes }, null, 2));\n\nreturn [{ json: { status: 'success', account_id, change_count: changes.length } }];"
-      },
-      "id": "save-v2",
-      "name": "Save v2 + Changelog",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [700, 500]
+      "position": [760, 560]
     }
   ],
   "connections": {
-    "Webhook: Pipeline A": { "main": [[{ "node": "Ollama: Extract Memo", "type": "main", "index": 0 }]] },
-    "Ollama: Extract Memo": { "main": [[{ "node": "Ollama Succeeded?", "type": "main", "index": 0 }]] },
-    "Ollama Succeeded?": {
+    "Webhook: Pipeline A": {
+      "main": [[{ "node": "Ollama: Extract Memo", "type": "main", "index": 0 }]]
+    },
+    "Ollama: Extract Memo": {
       "main": [
-        [{ "node": "Groq: Fallback Extract", "type": "main", "index": 0 }],
-        [{ "node": "Build Account Memo", "type": "main", "index": 0 }]
+        [{ "node": "Ollama Succeeded?", "type": "main", "index": 0 }],
+        [{ "node": "Groq: Fallback Extract", "type": "main", "index": 0 }]
       ]
     },
-    "Groq: Fallback Extract": { "main": [[{ "node": "Build Account Memo", "type": "main", "index": 0 }]] },
-    "Build Account Memo": { "main": [[{ "node": "Generate Agent Spec", "type": "main", "index": 0 }]] },
-    "Generate Agent Spec": { "main": [[{ "node": "Save to Outputs", "type": "main", "index": 0 }]] },
-    "Save to Outputs": { "main": [[{ "node": "Respond Pipeline A", "type": "main", "index": 0 }]] },
-    "Webhook: Pipeline B": { "main": [[{ "node": "Merge Onboarding -> v2", "type": "main", "index": 0 }]] },
-    "Merge Onboarding -> v2": { "main": [[{ "node": "Save v2 + Changelog", "type": "main", "index": 0 }]] }
+    "Ollama Succeeded?": {
+      "main": [
+        [{ "node": "Build Account Memo", "type": "main", "index": 0 }],
+        [{ "node": "Groq: Fallback Extract", "type": "main", "index": 0 }]
+      ]
+    },
+    "Groq: Fallback Extract": {
+      "main": [[{ "node": "Build Account Memo", "type": "main", "index": 0 }]]
+    },
+    "Build Account Memo": {
+      "main": [[{ "node": "Generate Agent Spec", "type": "main", "index": 0 }]]
+    },
+    "Generate Agent Spec": {
+      "main": [[{ "node": "Save to Outputs", "type": "main", "index": 0 }]]
+    },
+    "Save to Outputs": {
+      "main": [[{ "node": "Respond Pipeline A", "type": "main", "index": 0 }]]
+    },
+    "Webhook: Pipeline B": {
+      "main": [[{ "node": "Merge Onboarding → v2", "type": "main", "index": 0 }]]
+    },
+    "Merge Onboarding → v2": {
+      "main": [[{ "node": "Respond Pipeline B", "type": "main", "index": 0 }]]
+    }
   },
   "settings": { "executionOrder": "v1" },
-  "staticData": null,
-  "tags": ["clara", "automation", "voice-agent"],
-  "meta": {
-    "instanceId": "clara-automation-pipeline",
-    "description": "Clara Answers: Demo Call -> Agent v1, Onboarding -> Agent v2"
-  }
+  "tags": ["clara", "automation"],
+  "meta": { "description": "Clara Answers: Demo Call -> Agent v1, Onboarding -> Agent v2. Zero-cost stack: Ollama (local) -> Groq (free API) -> Rule-based fallback." }
 }
