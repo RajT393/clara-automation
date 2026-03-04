@@ -51,6 +51,7 @@ def merge_memos(v1_memo: dict, onboarding_data: dict) -> dict:
     Merge onboarding data into v1 memo.
     Onboarding data overrides v1 where explicitly provided.
     Null onboarding values do NOT override existing v1 values.
+    Lists use UNION strategy: keep all v1 items + add new v2 items.
     """
     v2 = deepcopy(v1_memo)
 
@@ -63,8 +64,18 @@ def merge_memos(v1_memo: dict, onboarding_data: dict) -> dict:
             if isinstance(val, dict) and isinstance(target.get(key), dict):
                 smart_update(target[key], val)
             elif isinstance(val, list):
-                if val:  # Only override if non-empty list
-                    target[key] = val
+                if val:  # Only process if non-empty list
+                    existing = target.get(key, [])
+                    if isinstance(existing, list):
+                        # Union: keep all existing items + add new items
+                        combined = list(existing)
+                        for item in val:
+                            if item not in combined:
+                                combined.append(item)
+                        target[key] = combined
+                    else:
+                        target[key] = val
+                # Empty list from onboarding: keep v1 data
             else:
                 target[key] = val
 
@@ -176,6 +187,27 @@ def run_pipeline_b(transcript_path: str, account_id: str, dry_run: bool = False)
     v2_spec = generate_agent_spec(v2_memo, account_id, version="v2")
     v2_spec["updated_at"] = datetime.now(timezone.utc).isoformat()
     v2_spec["previous_version"] = "v1"
+
+    # Re-evaluate questions_or_unknowns after merge
+    resolved_unknowns = []
+    bh = v2_memo.get("business_hours", {})
+    if bh.get("start"):
+        resolved_unknowns.extend(["Business hours not confirmed", "Exact business hours start/end time not confirmed"])
+    if bh.get("timezone"):
+        resolved_unknowns.extend(["Timezone not confirmed", "Timezone not specified"])
+    routing = v2_memo.get("emergency_routing_rules", {})
+    if routing.get("primary_phone") or routing.get("primary_contact"):
+        resolved_unknowns.extend(["Emergency contact phone number missing", "Emergency contact phone numbers not provided"])
+    if v2_memo.get("call_transfer_rules", {}).get("timeout_seconds"):
+        resolved_unknowns.extend(["Transfer timeout duration not specified"])
+    if v2_memo.get("office_address"):
+        resolved_unknowns.extend(["Office address not confirmed (expected — demo call)"])
+    if v2_memo.get("emergency_definition"):
+        resolved_unknowns.extend(["Emergency trigger conditions not clearly defined", "Emergency definitions not fully specified (expected — demo call)"])
+    v2_memo["questions_or_unknowns"] = [
+        q for q in (v2_memo.get("questions_or_unknowns") or [])
+        if q not in resolved_unknowns
+    ]
 
     # 6. Generate changelog
     changelog_md = generate_changelog(account_id, v1_memo, v2_memo, v1_spec, v2_spec, changes)
